@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M&E Imóveis</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C5A55A;--gold2:#E8CC85;--gold3:#8A6F35;
+  --bg:#080808;--bg2:#101010;--bg3:#161616;--bg4:#1C1C1C;
+  --border:#1E1E1E;--border2:#2A2A2A;
+  --text:#E8E2D9;--mid:#6B6560;--muted:#3A3530;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold3)}
+
+/* ── HEADER ── */
+header{background:rgba(8,8,8,.95);padding:0 52px;height:68px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid var(--border);backdrop-filter:blur(12px);}
+.logo{display:flex;align-items:baseline;gap:2px}
+.logo-main{font-family:'Fraunces',serif;color:var(--gold);font-size:1.55rem;font-weight:300;letter-spacing:3px}
+.logo-sub{font-size:.6rem;letter-spacing:5px;color:var(--mid);font-weight:400;text-transform:uppercase;margin-left:12px;padding-bottom:2px}
+.header-right{display:flex;align-items:center;gap:12px}
+.header-wpp{display:flex;align-items:center;gap:8px;background:var(--gold);color:var(--bg);padding:9px 20px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .25s;border:none;}
+.header-wpp:hover{background:var(--gold2)}
+.header-wpp svg{width:14px;height:14px;flex-shrink:0}
+.header-contato-btn{background:none;border:1px solid var(--border2);color:var(--mid);padding:9px 16px;font-family:'Syne',sans-serif;font-size:.65rem;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s;}
+.header-contato-btn:hover{border-color:var(--gold3);color:var(--gold)}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:88vh;display:flex;align-items:center;background:var(--bg2);overflow:hidden;padding:60px 52px;}
+.hero-noise{position:absolute;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px;pointer-events:none;}
+.hero-glow{position:absolute;top:-20%;right:-10%;width:60vw;height:100vh;background:radial-gradient(ellipse at center,rgba(197,165,90,.06) 0%,transparent 65%);pointer-events:none;}
+.hero-glow2{position:absolute;bottom:-30%;left:-5%;width:40vw;height:80vh;background:radial-gradient(ellipse at center,rgba(197,165,90,.03) 0%,transparent 60%);pointer-events:none;}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(197,165,90,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(197,165,90,.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none;}
+.hero-content{position:relative;z-index:2;max-width:640px}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:.65rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:32px;}
+.hero-eyebrow::after{content:'';flex:1;height:1px;width:40px;background:linear-gradient(90deg,var(--gold),transparent)}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(3.2rem,7vw,6rem);font-weight:200;line-height:1.05;color:var(--white);margin-bottom:8px;letter-spacing:-2px;}
+.hero h1 em{font-style:italic;color:var(--gold);font-weight:200}
+.hero h1 .line2{display:block;font-size:clamp(2rem,4.5vw,3.8rem);color:var(--mid);font-weight:200;margin-top:4px;letter-spacing:-1px;}
+.hero-sub{font-size:.88rem;color:var(--mid);font-weight:400;line-height:1.9;margin-top:28px;max-width:420px;letter-spacing:.3px}
+.hero-stats{display:flex;gap:40px;margin-top:52px;padding-top:36px;border-top:1px solid var(--border2)}
+.stat-num{font-family:'Fraunces',serif;font-size:2rem;font-weight:300;color:var(--white);line-height:1;display:block}
+.stat-label{font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--mid);margin-top:4px;display:block}
+.hero-deco{position:absolute;right:0;top:50%;transform:translateY(-50%);font-family:'Fraunces',serif;font-size:32vw;font-weight:200;color:rgba(197,165,90,.025);line-height:1;user-select:none;pointer-events:none;letter-spacing:-10px;}
+
+/* ── SEARCH BAR ── */
+.search-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 52px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.search-input-wrap{flex:1;min-width:200px;position:relative;}
+.search-input{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 16px 10px 40px;font-family:'Syne',sans-serif;font-size:.78rem;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--gold3)}
+.search-input::placeholder{color:var(--mid)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--mid);font-size:.85rem;pointer-events:none;}
+.price-select{background:var(--bg3);border:1px solid var(--border2);color:var(--mid);padding:10px 14px;font-family:'Syne',sans-serif;font-size:.72rem;outline:none;cursor:pointer;transition:border-color .2s;letter-spacing:.5px;}
+.price-select:focus{border-color:var(--gold3)}
+.price-select option{background:var(--bg3)}
+
+/* ── FILTROS ── */
+.filters-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 52px;display:flex;align-items:center;justify-content:space-between;overflow-x:auto;}
+.filters-left{display:flex;align-items:center}
+.filter-btn{background:none;border:none;border-bottom:2px solid transparent;color:var(--mid);padding:20px 22px;cursor:pointer;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;transition:all .2s;white-space:nowrap;}
+.filter-btn:hover{color:var(--text)}
+.filter-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.filters-count{font-size:.68rem;letter-spacing:2px;color:var(--muted);white-space:nowrap}
+.btn-nao-achei{background:none;border:1px solid var(--border2);color:var(--gold);padding:8px 14px;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.btn-nao-achei:hover{border-color:var(--gold);background:rgba(197,165,90,.08)}
+.modal-busca-box{background:var(--bg3);border:1px solid var(--border2);padding:32px;width:90%;max-width:500px;position:relative;animation:fadeUp .3s ease;max-height:90vh;overflow-y:auto;}
+
+/* ── GRID ── */
+.section{padding:52px;max-width:1500px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1px;background:var(--border);}
+.card{background:var(--bg2);cursor:pointer;transition:transform .4s cubic-bezier(.25,.46,.45,.94),box-shadow .4s;animation:fadeUp .5s ease both;position:relative;overflow:hidden;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card:hover{transform:translateY(-6px);box-shadow:0 32px 80px rgba(0,0,0,.7);z-index:2;background:var(--bg3)}
+.card-img-wrap{position:relative;height:260px;overflow:hidden;background:var(--bg3)}
+.card-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
+.card:hover .card-img{transform:scale(1.08)}
+.card-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem;color:var(--muted)}
+.card-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,rgba(0,0,0,.1) 50%,transparent 100%)}
+.card-badge{position:absolute;top:0;left:0;background:var(--gold);color:var(--bg);font-size:.6rem;padding:5px 12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;z-index:2;}
+.card-tag{position:absolute;top:0;right:0;font-size:.6rem;padding:5px 12px;letter-spacing:2px;text-transform:uppercase;font-weight:700;z-index:2;}
+.card-tag.novo{background:#1a6b3a;color:#7effc0}
+.card-tag.oportunidade{background:#7a3a00;color:#ffbe6b}
+.card-tag.destaque{background:#3a1a6b;color:#c9b0ff}
+.card-foto-count{position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,.75);color:rgba(255,255,255,.7);font-size:.65rem;padding:3px 9px;letter-spacing:1px;z-index:2;border:1px solid rgba(255,255,255,.1)}
+.card-del{position:absolute;top:36px;right:0;background:rgba(120,20,20,.95);color:white;border:none;width:32px;height:32px;cursor:pointer;font-size:.8rem;display:none;align-items:center;justify-content:center;z-index:3;transition:background .2s}
+.card-del:hover{background:#900}
+.admin-mode .card-del{display:flex}
+.card-body{padding:22px 24px 6px}
+.card-price{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:300;color:var(--white);margin-bottom:6px;letter-spacing:-1px;line-height:1}
+.card-title{font-size:.72rem;font-weight:600;color:var(--gold);margin-bottom:8px;letter-spacing:2px;text-transform:uppercase}
+.card-location{font-size:.73rem;color:var(--mid);margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.card-desc{font-size:.77rem;color:#4A4540;line-height:1.7;margin-bottom:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-features{display:flex;gap:0;font-size:.68rem;color:var(--mid);border-top:1px solid var(--border);margin-top:14px;}
+.card-feat{padding:10px 0;padding-right:16px;display:flex;align-items:center;gap:5px;letter-spacing:.5px}
+.card-feat:not(:last-child){border-right:1px solid var(--border);margin-right:16px}
+.card-admin-btns{display:none;border-top:1px solid var(--border)}
+.admin-mode .card-admin-btns{display:flex}
+.card-btn-edit{flex:1;background:rgba(197,165,90,.12);color:var(--gold);border:none;border-right:1px solid var(--border);padding:12px;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s}
+.card-btn-edit:hover{background:var(--gold);color:var(--bg)}
+.card-btn-del{flex:1;background:rgba(120,20,20,.12);color:#c44;border:none;padding:12px;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s}
+.card-btn-del:hover{background:#8B2020;color:white}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--bg2);max-width:800px;width:100%;max-height:92vh;overflow-y:auto;position:relative;animation:slideUp .3s ease;border:1px solid var(--border2)}
+@keyframes slideUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-close{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.7);color:var(--text);border:1px solid var(--border2);width:36px;height:36px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s}
+.modal-close:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.galeria{position:relative;height:360px;background:var(--bg);overflow:hidden}
+.galeria-img{width:100%;height:360px;object-fit:cover;display:none}
+.galeria-img.ativo{display:block;animation:fadeIn .3s ease}
+.galeria-placeholder{width:100%;height:360px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:5rem;color:var(--muted)}
+.galeria-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.7);color:white;border:1px solid rgba(255,255,255,.1);width:44px;height:44px;font-size:1.2rem;cursor:pointer;z-index:5;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.galeria-btn:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.galeria-prev{left:14px}.galeria-next{right:14px}
+.galeria-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
+.galeria-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:all .25s;border:none}
+.galeria-dot.ativo{background:var(--gold);width:18px;border-radius:3px}
+.galeria-counter{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.7);color:rgba(255,255,255,.7);font-size:.65rem;padding:4px 10px;letter-spacing:1.5px;z-index:5;border:1px solid rgba(255,255,255,.08)}
+.modal-body{padding:30px 34px 34px}
+.modal-badge{display:inline-block;background:var(--gold);color:var(--bg);font-size:.6rem;padding:4px 12px;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+.modal-tag-inline{display:inline-block;font-size:.6rem;padding:4px 10px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:14px;margin-left:6px}
+.modal-tag-inline.novo{background:#1a6b3a;color:#7effc0}
+.modal-tag-inline.oportunidade{background:#7a3a00;color:#ffbe6b}
+.modal-tag-inline.destaque{background:#3a1a6b;color:#c9b0ff}
+.modal-price{font-family:'Fraunces',serif;font-size:2.6rem;color:var(--white);margin-bottom:6px;font-weight:200;letter-spacing:-1.5px;line-height:1}
+.modal-title{font-size:.78rem;font-weight:600;color:var(--gold);margin-bottom:8px;letter-spacing:2px;text-transform:uppercase}
+.modal-location{font-size:.82rem;color:var(--mid);margin-bottom:24px}
+.modal-features{display:flex;flex-wrap:wrap;gap:0;padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:22px}
+.modal-features span{font-size:.75rem;color:var(--mid);padding-right:20px;margin-right:20px;border-right:1px solid var(--border);letter-spacing:.5px}
+.modal-features span:last-child{border-right:none}
+.modal-desc{font-size:.86rem;color:var(--mid);line-height:1.95;margin-bottom:28px;font-weight:400}
+.modal-actions{display:flex;gap:10px;margin-bottom:0}
+.btn-whatsapp{display:flex;align-items:center;justify-content:center;gap:10px;background:#128C46;color:var(--white);text-decoration:none;padding:17px 28px;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;flex:1;letter-spacing:3px;text-transform:uppercase;transition:background .2s}
+.btn-whatsapp:hover{background:#0a7a3a}
+.btn-share{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--bg3);color:var(--gold);border:1px solid var(--border2);padding:17px 20px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s;white-space:nowrap;}
+.btn-share:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+
+/* ── PÁGINA CONTATO ── */
+.contato-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.contato-overlay.open{display:flex;animation:fadeIn .2s ease}
+.contato-box{background:var(--bg2);max-width:560px;width:100%;border:1px solid var(--border2);animation:slideUp .3s ease;position:relative;}
+.contato-close{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.7);color:var(--text);border:1px solid var(--border2);width:36px;height:36px;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s}
+.contato-close:hover{background:var(--gold);color:var(--bg)}
+.contato-header{padding:32px 34px 24px;border-bottom:1px solid var(--border)}
+.contato-header h2{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:200;color:var(--white);letter-spacing:-0.5px}
+.contato-header p{font-size:.78rem;color:var(--mid);margin-top:6px;letter-spacing:.3px}
+.contato-body{padding:28px 34px 34px;display:flex;flex-direction:column;gap:16px}
+.contato-item{display:flex;align-items:center;gap:16px;padding:16px;background:var(--bg3);border:1px solid var(--border);text-decoration:none;transition:border-color .2s;}
+.contato-item:hover{border-color:var(--gold3)}
+.contato-icon{width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.contato-info{flex:1}
+.contato-label{font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--mid);display:block;margin-bottom:3px}
+.contato-value{font-size:.9rem;color:var(--text);font-weight:500}
+
+/* ── SENHA ── */
+.senha-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:3000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)}
+.senha-overlay.open{display:flex}
+.senha-box{background:var(--bg2);max-width:380px;width:100%;border:1px solid var(--border2);padding:40px 36px;text-align:center;}
+.senha-box h3{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:200;color:var(--white);margin-bottom:8px;letter-spacing:-0.5px}
+.senha-box p{font-size:.75rem;color:var(--mid);margin-bottom:28px;letter-spacing:.3px}
+.senha-input{width:100%;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:13px 16px;font-family:'Syne',sans-serif;font-size:.9rem;outline:none;text-align:center;letter-spacing:4px;margin-bottom:12px;transition:border-color .2s;}
+.senha-input:focus{border-color:var(--gold3)}
+.senha-btn{width:100%;background:var(--gold);color:var(--bg);border:none;padding:13px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s;margin-bottom:8px}
+.senha-btn:hover{background:var(--gold2)}
+.senha-erro{font-size:.72rem;color:#c44;letter-spacing:.5px;min-height:20px;margin-top:4px}
+.senha-cancel{background:none;border:none;color:var(--mid);font-family:'Syne',sans-serif;font-size:.65rem;cursor:pointer;letter-spacing:1px;text-transform:uppercase;margin-top:8px;transition:color .2s}
+.senha-cancel:hover{color:var(--text)}
+
+/* ── ADMIN ── */
+.admin-toggle{position:fixed;bottom:28px;right:28px;background:var(--bg3);color:var(--gold);border:1px solid var(--gold3);padding:11px 20px;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:600;cursor:pointer;letter-spacing:2px;text-transform:uppercase;z-index:500;transition:all .2s;}
+.admin-toggle:hover{background:var(--gold);color:var(--bg)}
+.admin-mode .admin-toggle{display:none}
+.admin-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(12,12,12,.97);border-top:1px solid var(--border2);padding:14px 32px;z-index:500;align-items:center;justify-content:space-between;gap:12px;backdrop-filter:blur(12px);}
+.admin-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.admin-bar.open{display:flex}
+.admin-bar-label{color:var(--gold);font-size:.65rem;letter-spacing:2.5px;text-transform:uppercase;font-weight:600}
+.admin-bar-label span{color:var(--mid);font-weight:400;font-size:.62rem;display:block;letter-spacing:.5px;text-transform:none;margin-top:3px}
+.admin-bar-btns{display:flex;gap:8px}
+.btn-admin-add{background:var(--gold);color:var(--bg);border:none;padding:10px 22px;font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s}
+.btn-admin-add:hover{background:var(--gold2)}
+.btn-admin-exit{background:none;border:1px solid var(--border2);color:var(--mid);padding:10px 16px;font-family:'Syne',sans-serif;font-size:.65rem;cursor:pointer;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.btn-admin-exit:hover{border-color:var(--mid);color:var(--text)}
+body.admin-mode{padding-bottom:70px}
+.admin-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:2000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.admin-panel.open{display:flex}
+.admin-box{background:var(--bg2);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border:1px solid var(--border2)}
+.btn-ia-preencher{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;padding:10px 18px;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s;margin-top:6px}
+.btn-ia-preencher:hover{opacity:.85;transform:translateY(-1px)}
+.ia-panel{background:rgba(79,70,229,.07);border:1px solid rgba(79,70,229,.3);padding:18px;margin-bottom:20px}
+.ia-panel-label{font-size:.68rem;color:#a5b4fc;letter-spacing:1px;margin-bottom:10px;font-weight:600}
+.ia-textarea{width:100%;background:var(--bg);border:1px solid rgba(79,70,229,.3);color:var(--text);padding:12px;font-family:'Syne',sans-serif;font-size:.82rem;outline:none;height:140px;resize:vertical;line-height:1.6}
+.ia-textarea:focus{border-color:#7c3aed}
+.btn-ia-processar{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;padding:12px 20px;font-family:'Syne',sans-serif;font-size:.68rem;font-weight:700;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s;flex:1}
+.btn-ia-processar:hover{opacity:.85}
+.btn-ia-processar:disabled{opacity:.5;cursor:not-allowed}
+.btn-ia-cancelar{background:none;border:1px solid var(--border2);color:var(--mid);padding:12px 16px;font-family:'Syne',sans-serif;font-size:.68rem;cursor:pointer;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.btn-ia-cancelar:hover{border-color:var(--mid);color:var(--text)}
+.admin-box-header{padding:26px 30px 22px;border-bottom:1px solid var(--border);position:relative;display:flex;flex-direction:column;gap:4px}
+.admin-box-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--gold3),transparent)}
+.admin-box h2{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:300;color:var(--white);letter-spacing:-0.5px}
+.admin-box-body{padding:24px 30px 28px}
+.edit-indicator{background:rgba(197,165,90,.07);border-left:2px solid var(--gold);padding:10px 14px;font-size:.72rem;color:var(--gold);margin-bottom:20px;letter-spacing:.5px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.62rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;font-weight:600}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:1px solid var(--border2);padding:11px 14px;font-family:'Syne',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s;background:var(--bg3);color:var(--text)}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--gold3)}
+.form-group select option{background:var(--bg3)}
+.form-group textarea{height:90px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fotos-lista{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+/* ── UPLOAD DE FOTOS ── */
+.upload-area{border:2px dashed var(--border2);background:var(--bg3);padding:32px 20px;text-align:center;cursor:pointer;transition:all .25s;margin-bottom:12px;user-select:none}
+.upload-area:hover,.upload-area.dragover{border-color:var(--gold3);background:rgba(197,165,90,.06)}
+.upload-icon{font-size:2rem;margin-bottom:8px}
+.upload-text{font-size:.78rem;color:var(--text);font-weight:600;letter-spacing:.5px}
+.upload-sub{font-size:.68rem;color:var(--mid);margin-top:4px;letter-spacing:.5px}
+.fotos-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin-bottom:8px}
+.preview-item{position:relative;aspect-ratio:1;background:var(--bg3);overflow:hidden}
+.preview-item img{width:100%;height:100%;object-fit:cover;display:block}
+.preview-remove{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.8);color:#fff;border:none;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center}
+.preview-remove:hover{background:#900}
+.preview-principal{position:absolute;bottom:0;left:0;right:0;background:rgba(197,165,90,.9);color:#000;font-size:.55rem;font-weight:700;letter-spacing:1px;text-align:center;padding:2px;text-transform:uppercase}
+.foto-item{display:flex;gap:8px;align-items:center}.foto-item input{flex:1}
+.foto-item button{background:rgba(120,20,20,.2);color:#c44;border:1px solid rgba(120,20,20,.3);width:36px;height:40px;cursor:pointer;font-size:.82rem;flex-shrink:0;transition:all .2s}
+.foto-item button:hover{background:#8B2020;color:white;border-color:#8B2020}
+.btn-add-foto{background:none;border:1px dashed var(--border2);color:var(--mid);padding:9px;font-family:'Syne',sans-serif;font-size:.68rem;cursor:pointer;width:100%;margin-top:6px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.btn-add-foto:hover{border-color:var(--gold3);color:var(--gold)}
+.btn-salvar-form{background:var(--gold);color:var(--bg);border:none;padding:14px 24px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;width:100%;margin-top:12px;letter-spacing:2.5px;text-transform:uppercase;transition:all .2s}
+.btn-salvar-form:hover{background:var(--gold2)}.btn-salvar-form:disabled{background:var(--border2);color:var(--mid);cursor:not-allowed}
+.btn-cancelar-edicao{background:none;border:1px solid var(--border2);padding:12px 20px;font-family:'Syne',sans-serif;font-size:.68rem;cursor:pointer;width:100%;margin-top:8px;color:var(--mid);letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.btn-cancelar-edicao:hover{border-color:var(--mid);color:var(--text)}
+
+.no-imoveis{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--mid)}
+.no-imoveis h3{font-family:'Fraunces',serif;font-size:2rem;margin-bottom:10px;color:var(--text);font-weight:300}
+.loading-msg{grid-column:1/-1;text-align:center;padding:120px 20px;color:var(--mid);font-size:.72rem;letter-spacing:3px;text-transform:uppercase}
+/* FORMULÁRIO BUSCA IMÓVEL */
+.busca-form{background:var(--bg2);border:1px solid var(--border2);padding:24px;max-width:500px;margin:0 auto;text-align:left}
+.busca-form-title{font-size:.78rem;font-weight:700;color:var(--white);letter-spacing:1px;margin-bottom:16px;text-align:center}
+.busca-fields{display:flex;flex-direction:column;gap:10px}
+.busca-field{display:flex;flex-direction:column;gap:4px}
+.busca-field label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--mid);font-weight:600}
+.busca-field input,.busca-field select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-family:'Syne',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s;width:100%}
+.busca-field input:focus,.busca-field select:focus{border-color:var(--gold3)}
+.busca-field select option{background:var(--bg3)}
+.busca-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.busca-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border:none;padding:13px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;width:100%;letter-spacing:2px;text-transform:uppercase;transition:all .2s;margin-top:4px}
+.busca-btn:hover{opacity:.9}
+/* SKELETON */
+.card-skeleton{background:var(--bg2);overflow:hidden;animation:fadeUp .5s ease both}
+.skel-img{height:260px;background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+.skel-body{padding:22px 24px}
+.skel-line{height:12px;background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;margin-bottom:10px;border-radius:2px}
+.skel-price{height:28px;width:60%;margin-bottom:12px}
+.skel-title{width:80%}
+.skel-local{width:50%}
+.skel-desc{width:90%;margin-top:4px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.toast{position:fixed;bottom:90px;right:28px;background:var(--bg3);color:var(--gold);padding:12px 20px;font-size:.72rem;letter-spacing:1.5px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;border-left:2px solid var(--gold);max-width:300px}
+.toast.show{opacity:1}
+
+/* ── BOTÃO FLUTUANTE WHATSAPP ── */
+.wpp-float{position:fixed;bottom:28px;left:28px;z-index:600;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.wpp-float-btn{display:flex;align-items:center;gap:10px;background:#128C46;color:#fff;text-decoration:none;padding:14px 20px;border-radius:50px;box-shadow:0 4px 20px rgba(18,140,70,.4);font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .3s;white-space:nowrap}
+.wpp-float-btn:hover{background:#0a7a3a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(18,140,70,.5)}
+.wpp-float-btn svg{width:20px;height:20px;flex-shrink:0}
+.wpp-float-pulse{width:12px;height:12px;background:#4ade80;border-radius:50%;border:2px solid #fff;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.7}}
+
+/* ── FAVORITOS ── */
+.btn-fav{position:absolute;top:36px;left:0;background:rgba(0,0,0,.7);border:none;width:32px;height:32px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;z-index:3;transition:all .2s;color:#fff}
+.btn-fav:hover,.btn-fav.favoritado{background:rgba(220,38,38,.85)}
+.fav-count-badge{position:absolute;top:-6px;right:-6px;background:#ef4444;color:#fff;font-size:.55rem;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
+/* Painel de favoritos */
+.favs-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1800;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.favs-overlay.open{display:flex;animation:fadeIn .2s ease}
+.favs-box{background:var(--bg2);width:100%;max-width:700px;max-height:90vh;overflow-y:auto;border:1px solid var(--border2);position:relative}
+.favs-header{padding:26px 30px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.favs-header h2{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:300;color:var(--white)}
+.favs-close{background:none;border:1px solid var(--border2);color:var(--mid);width:34px;height:34px;cursor:pointer;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.favs-close:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.favs-body{padding:20px 28px 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.fav-card{background:var(--bg3);border:1px solid var(--border);cursor:pointer;transition:border-color .2s;display:flex;gap:0;flex-direction:column}
+.fav-card:hover{border-color:var(--gold3)}
+.fav-card-img{height:140px;overflow:hidden;background:var(--bg)}
+.fav-card-img img{width:100%;height:100%;object-fit:cover}
+.fav-card-body{padding:14px 16px}
+.fav-card-price{font-family:'Fraunces',serif;font-size:1.2rem;color:var(--white);font-weight:300}
+.fav-card-title{font-size:.65rem;color:var(--gold);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px}
+.fav-card-local{font-size:.7rem;color:var(--mid);margin-top:4px}
+.fav-card-remove{width:100%;background:rgba(120,20,20,.15);border:none;border-top:1px solid var(--border);color:#c44;padding:10px;font-family:'Syne',sans-serif;font-size:.62rem;cursor:pointer;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
+.fav-card-remove:hover{background:#8B2020;color:#fff}
+.favs-empty{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--mid);font-size:.8rem;letter-spacing:1px}
+.btn-fav-header{position:relative;background:none;border:1px solid var(--border2);color:var(--mid);padding:9px 14px;font-family:'Syne',sans-serif;font-size:.65rem;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .2s}
+.btn-fav-header:hover{border-color:var(--gold3);color:var(--gold)}
+
+/* ── FILTRO QUARTOS ── */
+.quartos-select{background:var(--bg3);border:1px solid var(--border2);color:var(--mid);padding:10px 14px;font-family:'Syne',sans-serif;font-size:.72rem;outline:none;cursor:pointer;transition:border-color .2s;letter-spacing:.5px}
+.quartos-select:focus{border-color:var(--gold3)}
+.quartos-select option{background:var(--bg3)}
+
+/* ── BANNER CONTATO WHATSAPP ── */
+.wpp-banner{background:linear-gradient(135deg,#0a4d27,#128C46);padding:40px 52px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+.wpp-banner-text h3{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:300;color:#fff;letter-spacing:-0.5px}
+.wpp-banner-text p{font-size:.78rem;color:rgba(255,255,255,.7);margin-top:6px;letter-spacing:.3px}
+.wpp-banner-btn{display:flex;align-items:center;gap:10px;background:#fff;color:#128C46;text-decoration:none;padding:14px 28px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.wpp-banner-btn:hover{background:#f0fdf4}
+
+/* ── ANÁLISE DE CRÉDITO ── */
+.credito-section{background:linear-gradient(135deg,#0a0a0a 0%,#141414 50%,#0d0d0d 100%);padding:64px 52px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.credito-section::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(197,165,90,.08) 0%,transparent 70%);pointer-events:none}
+.credito-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.credito-tag{display:inline-block;background:rgba(197,165,90,.1);border:1px solid rgba(197,165,90,.3);padding:5px 14px;font-size:.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:20px}
+.credito-titulo{font-family:'Fraunces',serif;font-size:2.4rem;font-weight:300;color:var(--white);line-height:1.15;letter-spacing:-1px;margin-bottom:16px}
+.credito-titulo em{color:var(--gold);font-style:italic}
+.credito-sub{font-size:.85rem;color:var(--mid);line-height:1.8;margin-bottom:28px}
+.credito-ben{font-size:.78rem;color:#7effc0;font-weight:600;letter-spacing:.5px;margin-bottom:8px}
+.credito-form-box{background:var(--bg2);border:1px solid var(--border2);padding:28px}
+.credito-form-title{font-size:.85rem;font-weight:700;color:var(--white);letter-spacing:1px;margin-bottom:4px}
+.credito-form-sub{font-size:.68rem;color:var(--mid);letter-spacing:.5px;margin-bottom:20px}
+.credito-fields{display:flex;flex-direction:column;gap:10px}
+.credito-field{display:flex;flex-direction:column;gap:4px}
+.credito-field label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--mid);font-weight:600}
+.credito-field input,.credito-field select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-family:'Syne',sans-serif;font-size:.8rem;outline:none;transition:border-color .2s;width:100%}
+.credito-field input:focus,.credito-field select:focus{border-color:var(--gold3)}
+.credito-field select option{background:var(--bg3)}
+.credito-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.credito-field-sm{display:flex;flex-direction:column;gap:4px}
+.credito-field-sm label{font-size:.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--mid);font-weight:600}
+.credito-field-sm select{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 12px;font-family:'Syne',sans-serif;font-size:.8rem;outline:none;width:100%}
+.credito-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border:none;padding:14px;font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;width:100%;letter-spacing:2px;text-transform:uppercase;transition:all .2s;margin-top:6px}
+.credito-btn:hover{opacity:.9;transform:translateY(-1px)}
+
+/* ── RODAPÉ ── */
+.footer{background:var(--bg2);border-top:1px solid var(--border);padding:32px 52px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.footer-logo{font-family:'Fraunces',serif;color:var(--gold);font-size:1.2rem;font-weight:300;letter-spacing:3px}
+.footer-info{font-size:.65rem;color:var(--mid);letter-spacing:.5px;text-align:center}
+.footer-creci{font-size:.65rem;color:var(--mid);letter-spacing:1px;text-align:right}
+
+@media(max-width:640px){
+  .credito-inner{grid-template-columns:1fr}
+  .credito-section{padding:40px 20px}
+  .credito-titulo{font-size:1.8rem}
+  .wpp-banner{padding:28px 20px}
+  .footer{padding:24px 20px;flex-direction:column;text-align:center}
+  .footer-creci{text-align:center}
+  .wpp-float{bottom:90px}
+  .favs-body{grid-template-columns:1fr}
+  header{padding:0 20px}
+  .hero{padding:50px 20px;min-height:auto}
+  .hero-deco{display:none}.hero-stats{gap:24px}
+  .search-bar{padding:12px 20px}
+  .filters-bar{padding:0 20px}
+  .section{padding:28px 20px 100px}
+  .modal-body{padding:20px}.admin-box-header,.admin-box-body{padding:20px}
+  .form-row{grid-template-columns:1fr}
+  .galeria{height:260px}.galeria-img{height:260px}
+  .admin-bar{padding:12px 16px}
+  .admin-bar-label span{display:none}
+  .logo-sub{display:none}
+  .modal-actions{flex-direction:column}
+  .contato-body{padding:20px}
+  .contato-header{padding:24px 20px 18px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-main">M&amp;E</span>
+    <span class="logo-sub">Imóveis &amp; Negócios</span>
+  </div>
+  <div class="header-right">
+    <button class="header-contato-btn" onclick="abrirContato()">Contato</button>
+    <button class="btn-fav-header" id="btn-fav-header" onclick="abrirFavoritos()">❤ Favoritos <span id="fav-header-count" style="display:none" class="fav-count-badge"></span></button>
+    <a href="#" class="header-wpp" id="btn-whats-header">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      WhatsApp
+    </a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">M&amp;E Imóveis</div>
+    <h1>O imóvel <em>certo</em><span class="line2">para cada momento.</span></h1>
+    <p class="hero-sub">Qualidade, confiança e os melhores imóveis selecionados para você. Seu próximo lar ou investimento começa aqui.</p>
+    <div class="hero-stats">
+      <div><span class="stat-num" id="stat-count">—</span><span class="stat-label">Imóveis Disponíveis</span></div>
+      <div><span class="stat-num">100%</span><span class="stat-label">Confiança Garantida</span></div>
+      <div><span class="stat-num">24h</span><span class="stat-label">Atendimento Rápido</span></div>
+    </div>
+  </div>
+  <div class="hero-deco">M</div>
+</section>
+
+<!-- BUSCA -->
+<div class="search-bar">
+  <div class="search-input-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="search-input" placeholder="Buscar por título, bairro, cidade..." oninput="buscar()">
+  </div>
+  <select class="price-select" id="price-filter" onchange="buscar()">
+    <option value="">Qualquer preço</option>
+    <option value="200000">Até R$ 200 mil</option>
+    <option value="400000">Até R$ 400 mil</option>
+    <option value="600000">Até R$ 600 mil</option>
+    <option value="1000000">Até R$ 1 milhão</option>
+    <option value="2000000">Até R$ 2 milhões</option>
+  </select>
+  <select class="quartos-select" id="quartos-filter" onchange="buscar()">
+    <option value="">Quartos: todos</option>
+    <option value="1">1 quarto</option>
+    <option value="2">2 quartos</option>
+    <option value="3">3 quartos</option>
+    <option value="4">4+ quartos</option>
+  </select>
+</div>
+
+<div class="filters-bar">
+  <div class="filters-left">
+    <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+    <button class="filter-btn" onclick="filtrar('Residencial',this)">Residencial</button>
+    <button class="filter-btn" onclick="filtrar('Comercial',this)">Comercial</button>
+    <button class="filter-btn" onclick="filtrar('Terreno',this)">Terrenos</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="filters-count" id="grid-count"></span>
+    <button class="btn-nao-achei" onclick="abrirModalBusca()">🔍 Não achei o que quero</button>
+  </div>
+</div>
+
+<!-- MODAL BUSCA -->
+<div class="modal-overlay" id="modal-busca" onclick="fecharModalBusca(event)">
+  <div class="modal-busca-box">
+    <button class="modal-close" onclick="fecharModalBusca()">✕</button>
+    <div class="busca-form-title" style="margin-bottom:18px;font-size:.95rem">📋 Me conta o que você procura</div>
+    <div class="busca-fields">
+      <div class="busca-field"><label>Seu nome</label><input type="text" id="mbq-nome" placeholder="Nome completo"></div>
+      <div class="busca-field"><label>Seu WhatsApp</label><input type="text" id="mbq-wpp" placeholder="(62) 99999-9999"></div>
+      <div class="busca-row">
+        <div class="busca-field"><label>Tipo</label><select id="mbq-tipo"><option value="">Selecione</option><option>Casa</option><option>Apartamento</option><option>Terreno</option><option>Comercial</option></select></div>
+        <div class="busca-field"><label>Quartos</label><select id="mbq-quartos"><option value="">Qualquer</option><option>1</option><option>2</option><option>3</option><option>4+</option></select></div>
+      </div>
+      <div class="busca-row">
+        <div class="busca-field"><label>Valor até</label><select id="mbq-valor"><option value="">Selecione</option><option>R$ 200 mil</option><option>R$ 400 mil</option><option>R$ 600 mil</option><option>R$ 800 mil</option><option>Acima de R$ 800 mil</option></select></div>
+        <div class="busca-field"><label>Bairro preferido</label><input type="text" id="mbq-bairro" placeholder="Ex: Setor Bueno"></div>
+      </div>
+      <button class="busca-btn" onclick="enviarBuscaModal()">📲 Quero ser avisado</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="grid" id="grid"><div class="loading-msg">Carregando imóveis...</div></div>
+</div>
+
+<!-- MODAL IMÓVEL -->
+<div class="modal-overlay" id="modal" onclick="fecharModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal()">✕</button>
+    <div class="galeria" id="modal-galeria">
+      <div class="galeria-placeholder" id="modal-placeholder">🏠</div>
+      <button class="galeria-btn galeria-prev" id="galeria-prev" onclick="galeriaNav(-1)" style="display:none">‹</button>
+      <button class="galeria-btn galeria-next" id="galeria-next" onclick="galeriaNav(1)" style="display:none">›</button>
+      <div class="galeria-dots" id="galeria-dots"></div>
+      <div class="galeria-counter" id="galeria-counter" style="display:none"></div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <span class="modal-badge" id="modal-tipo"></span>
+        <span class="modal-tag-inline" id="modal-tag-inline" style="display:none"></span>
+      </div>
+      <div class="modal-price" id="modal-preco"></div>
+      <div class="modal-title" id="modal-titulo"></div>
+      <div class="modal-location" id="modal-local"></div>
+      <div class="modal-features" id="modal-features"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div id="modal-video-wrap" style="display:none;margin-bottom:24px">
+        <div style="font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--mid);margin-bottom:10px;font-weight:600">🎥 Vídeo do Imóvel</div>
+        <video id="modal-video" controls style="width:100%;max-height:320px;background:#000;display:block"></video>
+      </div>
+      <div class="modal-actions">
+        <a href="#" class="btn-whatsapp" id="modal-wpp" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          Tenho Interesse
+        </a>
+        <button class="btn-share" id="btn-share" onclick="compartilhar()">📤 Compartilhar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTATO -->
+<div class="contato-overlay" id="contato-overlay" onclick="fecharContato(event)">
+  <div class="contato-box">
+    <button class="contato-close" onclick="fecharContato()">✕</button>
+    <div class="contato-header">
+      <h2>Entre em contato</h2>
+      <p>Estamos prontos para te atender. Escolha o canal de sua preferência.</p>
+    </div>
+    <div class="contato-body">
+      <a href="#" class="contato-item" id="contato-wpp">
+        <div class="contato-icon">💬</div>
+        <div class="contato-info">
+          <span class="contato-label">WhatsApp</span>
+          <span class="contato-value" id="contato-wpp-num">—</span>
+        </div>
+      </a>
+      <div class="contato-item" style="cursor:default">
+        <div class="contato-icon">🏢</div>
+        <div class="contato-info">
+          <span class="contato-label">Empresa</span>
+          <span class="contato-value">M&E Imóveis &amp; Negócios</span>
+        </div>
+      </div>
+      <div class="contato-item" style="cursor:default">
+        <div class="contato-icon">⏰</div>
+        <div class="contato-info">
+          <span class="contato-label">Atendimento</span>
+          <span class="contato-value">Seg–Sex 8h–18h · Sáb 8h–12h</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEÇÃO ANÁLISE DE CRÉDITO -->
+<div class="credito-section" id="analise-credito">
+  <div class="credito-inner">
+    <div class="credito-left">
+      <div class="credito-tag">🏠 Financiamento Imobiliário</div>
+      <h2 class="credito-titulo">Casa própria <em>sem entrada</em> pode ser realidade!</h2>
+      <p class="credito-sub">Faça sua análise de crédito gratuita agora e descubra em minutos quanto você pode financiar.</p>
+      <div class="credito-beneficios">
+        <div class="credito-ben">✓ Use seu FGTS como entrada</div>
+        <div class="credito-ben">✓ Análise rápida e sem compromisso</div>
+        <div class="credito-ben">✓ Atendimento personalizado</div>
+      </div>
+    </div>
+    <div class="credito-right">
+      <div class="credito-form-box">
+        <div class="credito-form-title">📋 Análise de Crédito Gratuita</div>
+        <div class="credito-form-sub">Preencha abaixo — retorno em até 24h</div>
+        <div class="credito-fields">
+          <div class="credito-field"><label>Nome completo</label><input type="text" id="cr-nome" placeholder="Seu nome"></div>
+          <div class="credito-field"><label>WhatsApp</label><input type="text" id="cr-wpp" placeholder="(62) 99999-9999"></div>
+          <div class="credito-field"><label>CPF (para consulta de crédito)</label><input type="text" id="cr-cpf-num" placeholder="000.000.000-00" maxlength="14" oninput="this.value=this.value.replace(/\D/g,'').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2')"></div>
+          <div class="credito-row2">
+            <div class="credito-field-sm">
+              <label>Tipo de imóvel</label>
+              <select id="cr-tipo-imovel"><option value="">Selecione</option><option>Casa</option><option>Apartamento</option><option>Qualquer</option></select>
+            </div>
+            <div class="credito-field-sm">
+              <label>Tem FGTS?</label>
+              <select id="cr-fgts"><option value="">...</option><option>Sim</option><option>Não</option></select>
+            </div>
+          </div>
+          <div class="credito-field"><label>Renda mensal</label>
+            <select id="cr-renda">
+              <option value="">Selecione...</option>
+              <option>Até R$ 2.000</option>
+              <option>R$ 2.000 – R$ 4.000</option>
+              <option>R$ 4.000 – R$ 7.000</option>
+              <option>R$ 7.000 – R$ 10.000</option>
+              <option>Acima de R$ 10.000</option>
+            </select>
+          </div>
+          <div class="credito-field"><label>Valor do imóvel que busca</label>
+            <select id="cr-valor">
+              <option value="">Selecione...</option>
+              <option>Até R$ 200 mil</option>
+              <option>R$ 200 mil – R$ 400 mil</option>
+              <option>R$ 400 mil – R$ 600 mil</option>
+              <option>Acima de R$ 600 mil</option>
+            </select>
+          </div>
+          <div class="credito-field">
+            <label>Restrição no CPF?</label>
+            <select id="cr-cpf"><option value="">...</option><option>Não</option><option>Sim</option></select>
+          </div>
+          <button class="credito-btn" onclick="enviarAnalise()">📲 Quero minha análise gratuita</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANNER WHATSAPP -->
+<div class="wpp-banner" id="wpp-banner">
+  <div class="wpp-banner-text">
+    <h3>Encontrou o imóvel ideal?</h3>
+    <p>Fale comigo agora pelo WhatsApp e agende sua visita hoje mesmo.</p>
+  </div>
+  <a href="#" class="wpp-banner-btn" id="wpp-banner-link" target="_blank">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+    Falar no WhatsApp
+  </a>
+</div>
+
+<!-- RODAPÉ -->
+<footer class="footer">
+  <div class="footer-logo">M&amp;E Imóveis</div>
+  <div class="footer-info">Corretora Autônoma · Goiânia, GO<br><span style="color:var(--muted)">phani.paixao@gmail.com · (62) 98186-0902</span></div>
+  <div class="footer-creci">CRECI · GO<br><span style="color:var(--muted);font-size:.6rem">© 2025 M&amp;E Imóveis</span></div>
+</footer>
+
+<!-- BOTÃO FLUTUANTE WHATSAPP -->
+<a href="#" class="wpp-float-btn" id="wpp-float-link" target="_blank" style="position:fixed;bottom:28px;left:28px;z-index:600">
+  <div class="wpp-float-pulse"></div>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+  Falar Agora
+</a>
+
+<!-- PAINEL FAVORITOS -->
+<div class="favs-overlay" id="favs-overlay" onclick="if(event.target===this)fecharFavoritos()">
+  <div class="favs-box">
+    <div class="favs-header">
+      <h2>❤ Meus Favoritos</h2>
+      <button class="favs-close" onclick="fecharFavoritos()">✕</button>
+    </div>
+    <div class="favs-body" id="favs-body"></div>
+  </div>
+</div>
+
+<!-- SENHA -->
+<div class="senha-overlay" id="senha-overlay">
+  <div class="senha-box">
+    <h3>Acesso Restrito</h3>
+    <p>Digite a senha para acessar o painel de gerenciamento</p>
+    <input type="password" class="senha-input" id="senha-input" placeholder="••••••" onkeydown="if(event.key==='Enter')verificarSenha()">
+    <button class="senha-btn" onclick="verificarSenha()">Entrar</button>
+    <div class="senha-erro" id="senha-erro"></div>
+    <button class="senha-cancel" onclick="fecharSenha()">Cancelar</button>
+  </div>
+</div>
+
+<button class="admin-toggle" onclick="pedirSenha()">⚙ Gerenciar</button>
+
+<div class="admin-bar" id="admin-bar">
+  <div class="admin-bar-label">⚙ Modo Administrador<span>Clique em ✏ Editar ou 🗑 Excluir nos cards abaixo</span></div>
+  <div class="admin-bar-btns">
+    <button class="btn-admin-add" onclick="abrirFormAdicionar()">+ Adicionar Imóvel</button>
+    <button class="btn-admin-exit" onclick="toggleAdmin()">✕ Sair</button>
+  </div>
+</div>
+
+<div class="admin-panel" id="admin">
+  <div class="admin-box">
+    <div class="admin-box-header">
+      <h2 id="admin-titulo">Adicionar Imóvel</h2>
+      <button class="btn-ia-preencher" onclick="abrirIAPreencher()">✨ Colar Descritivo</button>
+    </div>
+    <div class="admin-box-body">
+      <!-- PAINEL IA -->
+      <div class="ia-panel" id="ia-panel" style="display:none">
+        <div class="ia-panel-label">✨ Cole o descritivo do imóvel abaixo — a IA preenche tudo automaticamente</div>
+        <textarea id="ia-texto" class="ia-textarea" placeholder="Ex:&#10;Casa 3 quartos, 2 banheiros, 1 vaga&#10;Residencial Canadá, Goiânia&#10;R$ 599.000&#10;Área gourmet, energia solar..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn-ia-processar" id="btn-ia-processar" onclick="processarIA()">✨ Preencher Formulário</button>
+          <button class="btn-ia-cancelar" onclick="fecharIAPreencher()">Cancelar</button>
+        </div>
+      </div>
+      <div class="edit-indicator" id="edit-indicator" style="display:none">✏ Editando imóvel — altere os campos e salve.</div>
+      <div class="form-group"><label>Título do Imóvel</label><input type="text" id="f-titulo" placeholder="Ex: Apartamento 3 quartos no Centro"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Tipo</label><select id="f-tipo"><option>Residencial</option><option>Comercial</option><option>Terreno</option></select></div>
+        <div class="form-group"><label>Preço</label><input type="text" id="f-preco" placeholder="R$ 350.000"></div>
+      </div>
+      <div class="form-group"><label>Localização / Endereço</label><input type="text" id="f-local" placeholder="Rua das Flores, 123 — Bairro, Cidade"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Quartos</label><input type="number" id="f-quartos" min="0" placeholder="0"></div>
+        <div class="form-group"><label>Banheiros</label><input type="number" id="f-banheiros" min="0" placeholder="0"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Vagas de Garagem</label><input type="number" id="f-vagas" min="0" placeholder="0"></div>
+        <div class="form-group"><label>Área (m²)</label><input type="number" id="f-area" min="0" placeholder="0"></div>
+      </div>
+      <div class="form-group">
+        <label>🏷️ Tag de Destaque</label>
+        <select id="f-tag">
+          <option value="">Nenhuma</option>
+          <option value="novo">🟢 Novo</option>
+          <option value="oportunidade">🟠 Oportunidade</option>
+          <option value="destaque">🟣 Destaque</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>📸 Fotos do Imóvel</label>
+        <!-- Upload direto do computador -->
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('input-fotos').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+          <div class="upload-icon">📁</div>
+          <div class="upload-text">Clique aqui ou arraste as fotos do computador</div>
+          <div class="upload-sub">JPG, PNG, WEBP — várias de uma vez</div>
+          <input type="file" id="input-fotos" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
+        </div>
+        <!-- Prévia das fotos selecionadas -->
+        <div class="fotos-preview" id="fotos-preview"></div>
+        <!-- Opção alternativa: link manual -->
+        <details style="margin-top:10px">
+          <summary style="font-size:.68rem;color:var(--mid);cursor:pointer;letter-spacing:1px">+ Adicionar por link (opcional)</summary>
+          <div style="margin-top:8px">
+            <div class="fotos-lista" id="fotos-lista">
+              <div class="foto-item"><input type="text" placeholder="https://i.imgur.com/exemplo.jpg"><button onclick="removerFoto(this)">✕</button></div>
+            </div>
+            <button class="btn-add-foto" onclick="adicionarCampoFoto()">+ Adicionar outro link</button>
+          </div>
+        </details>
+      </div>
+      <div class="form-group">
+        <label>🎥 Vídeo do Imóvel (opcional)</label>
+        <div class="upload-area" id="upload-video-area" onclick="document.getElementById('input-video').click()" style="padding:20px">
+          <div class="upload-icon" id="video-upload-icon">🎬</div>
+          <div class="upload-text" id="video-upload-text">Clique para selecionar o vídeo do celular</div>
+          <div class="upload-sub">MP4, MOV — máx recomendado 50MB</div>
+          <input type="file" id="input-video" accept="video/*" style="display:none" onchange="handleVideo(this.files[0])">
+        </div>
+        <div id="video-preview-wrap" style="display:none;margin-top:8px;position:relative">
+          <video id="video-preview" controls style="width:100%;max-height:220px;background:#000;display:block"></video>
+          <button onclick="removerVideo()" style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.8);color:#fff;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.8rem">✕</button>
+        </div>
+      </div>
+      <div class="form-group"><label>Descrição</label><textarea id="f-desc" placeholder="Descreva o imóvel em detalhes..."></textarea></div>
+      <div class="form-group"><label>WhatsApp (com DDD, sem espaço)</label><input type="text" id="f-wpp" placeholder="62999999999"></div>
+      <button class="btn-salvar-form" id="btn-salvar" onclick="salvarImovel()">✓ Adicionar ao Catálogo</button>
+      <button class="btn-cancelar-edicao" id="btn-cancelar" style="display:none" onclick="cancelarEdicao()">✕ Cancelar Edição</button>
+      <button class="btn-cancelar-edicao" onclick="fecharPainelAdmin()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,collection,addDoc,getDocs,deleteDoc,doc,updateDoc,orderBy,query}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyDPPWetVT4Kkgsf2yzPc5XAyUn3bZDVnR4",authDomain:"imoveis-cc9ac.firebaseapp.com",projectId:"imoveis-cc9ac",storageBucket:"imoveis-cc9ac.firebasestorage.app",messagingSenderId:"932401411828",appId:"1:932401411828:web:18acd182e3b90cb23510a1"};
+const app=initializeApp(firebaseConfig),db=getFirestore(app);
+
+// ===== SENHA (mude aqui!) =====
+const SENHA_ADMIN = "meimoveis2025";
+
+let imoveis=[],filtroAtual='todos',adminAberto=false,whatsappGlobal='',galeriaFotos=[],galeriaIndex=0,modoEdicaoId=null,termoBusca='',filtroPreco='',filtroQuartos='',imovelAtual=null;
+let favoritos=JSON.parse(localStorage.getItem('me_favoritos')||'[]');
+
+function salvarFavoritos(){localStorage.setItem('me_favoritos',JSON.stringify(favoritos));}
+function atualizarBadgeFavs(){
+  const c=document.getElementById('fav-header-count');
+  if(favoritos.length>0){c.style.display='flex';c.textContent=favoritos.length;}
+  else{c.style.display='none';}
+}
+window.toggleFav=function(id,event){
+  event.stopPropagation();
+  const idx=favoritos.indexOf(id);
+  if(idx===-1)favoritos.push(id); else favoritos.splice(idx,1);
+  salvarFavoritos();atualizarBadgeFavs();render();
+};
+window.abrirFavoritos=function(){
+  const body=document.getElementById('favs-body');
+  const lista=imoveis.filter(i=>favoritos.includes(i.id));
+  if(lista.length===0){body.innerHTML='<div class="favs-empty">Você ainda não favoritou nenhum imóvel.<br><span style="font-size:.7rem;margin-top:8px;display:block">Clique no ❤ nos cards para favoritar.</span></div>';}
+  else{body.innerHTML=lista.map(im=>{
+    const fotos=Array.isArray(im.fotos)?im.fotos.filter(f=>f):(im.foto?[im.foto]:[]);
+    return`<div class="fav-card" onclick="fecharFavoritos();abrirModal('${im.id}')">
+      <div class="fav-card-img">${fotos[0]?`<img src="${fotos[0]}" alt="${im.titulo}">`:'<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--muted)">🏠</div>'}</div>
+      <div class="fav-card-body">
+        <div class="fav-card-price">${im.preco}</div>
+        <div class="fav-card-title">${im.titulo}</div>
+        <div class="fav-card-local">📍 ${im.local}</div>
+      </div>
+      <button class="fav-card-remove" onclick="event.stopPropagation();toggleFav('${im.id}',event);renderFavsPanel()">🗑 Remover dos favoritos</button>
+    </div>`;
+  }).join('');}
+  document.getElementById('favs-overlay').classList.add('open');document.body.style.overflow='hidden';
+};
+window.renderFavsPanel=function(){if(document.getElementById('favs-overlay').classList.contains('open'))abrirFavoritos();};
+window.fecharFavoritos=function(){document.getElementById('favs-overlay').classList.remove('open');document.body.style.overflow='';};
+
+// ===== SENHA =====
+window.pedirSenha=function(){document.getElementById('senha-overlay').classList.add('open');document.getElementById('senha-input').value='';document.getElementById('senha-erro').textContent='';setTimeout(()=>document.getElementById('senha-input').focus(),100);};
+window.fecharSenha=function(){document.getElementById('senha-overlay').classList.remove('open');};
+window.verificarSenha=function(){
+  const v=document.getElementById('senha-input').value;
+  if(v===SENHA_ADMIN){fecharSenha();toggleAdmin();}
+  else{document.getElementById('senha-erro').textContent='Senha incorreta. Tente novamente.';document.getElementById('senha-input').value='';}
+};
+
+// ===== CARREGAR COM CACHE =====
+async function carregarImoveis(){
+  // Mostrar skeleton enquanto carrega
+  mostrarSkeleton();
+  try{
+    // Cache local — carrega instantâneo na segunda visita
+    const cacheKey='me_imoveis_cache';
+    const cacheTime='me_imoveis_cache_time';
+    const cached=localStorage.getItem(cacheKey);
+    const cachedAt=parseInt(localStorage.getItem(cacheTime)||'0');
+    const agora=Date.now();
+    // Usa cache se tiver menos de 5 minutos
+    if(cached&&(agora-cachedAt)<5*60*1000){
+      imoveis=JSON.parse(cached);
+      if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
+      document.getElementById('stat-count').textContent=imoveis.length||'0';
+      render();
+    }
+    // Busca no Firebase em paralelo (atualiza silenciosamente)
+    const q=query(collection(db,"imoveis"),orderBy("criadoEm","desc")),snap=await getDocs(q);
+    imoveis=snap.docs.map(d=>({id:d.id,...d.data()}));
+    localStorage.setItem(cacheKey,JSON.stringify(imoveis));
+    localStorage.setItem(cacheTime,String(agora));
+    if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
+    document.getElementById('stat-count').textContent=imoveis.length||'0';
+    render();
+  }catch(e){document.getElementById('grid').innerHTML='<div class="loading-msg">⚠ Erro ao carregar. Verifique a conexão.</div>';}
+}
+
+function mostrarSkeleton(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML=Array(6).fill(`
+    <div class="card-skeleton">
+      <div class="skel-img"></div>
+      <div class="skel-body">
+        <div class="skel-line skel-price"></div>
+        <div class="skel-line skel-title"></div>
+        <div class="skel-line skel-local"></div>
+        <div class="skel-line skel-desc"></div>
+      </div>
+    </div>`).join('');
+}
+
+// ===== FILTRO DE PREÇO =====
+function extrairPreco(str){return parseInt((str||'').replace(/\D/g,''))||0;}
+
+// ===== RENDER =====
+function render(){
+  const grid=document.getElementById('grid');
+  let lista=filtroAtual==='todos'?imoveis:imoveis.filter(i=>i.tipo===filtroAtual);
+  if(termoBusca){const t=termoBusca.toLowerCase();lista=lista.filter(i=>(i.titulo||'').toLowerCase().includes(t)||(i.local||'').toLowerCase().includes(t)||(i.desc||'').toLowerCase().includes(t));}
+  if(filtroPreco){const max=parseInt(filtroPreco);lista=lista.filter(i=>extrairPreco(i.preco)<=max);}
+  if(filtroQuartos){const q=parseInt(filtroQuartos);lista=lista.filter(i=>filtroQuartos==='4'?i.quartos>=4:i.quartos===q);}
+  document.getElementById('grid-count').textContent=lista.length>0?`${lista.length} imóve${lista.length===1?'l':'is'} encontrado${lista.length===1?'':'s'}`:'';
+  if(lista.length===0){
+    const tipoNome=filtroAtual==='todos'?'imóveis':filtroAtual==='casa'?'casas':filtroAtual==='apartamento'?'apartamentos':filtroAtual==='terreno'?'terrenos':'imóveis comerciais';
+    grid.innerHTML=`<div class="no-imoveis">
+    <div style="font-size:2.5rem;margin-bottom:16px">🔍</div>
+    <h3>Nenhum${filtroAtual==='apartamento'?' apartamento':filtroAtual==='terreno'?' terreno':filtroAtual==='casa'?' casa':filtroAtual==='comercial'?' imóvel comercial':' imóvel'} disponível no momento</h3>
+    <p style="font-size:.78rem;margin-top:8px;color:#555;margin-bottom:24px">Deixe seus dados e te aviso assim que surgir uma opção de <strong>${tipoNome}</strong>!</p>
+    <div class="busca-form">
+      <div class="busca-form-title">📋 Me conta o que você procura</div>
+      <div class="busca-fields">
+        <div class="busca-field"><label>Seu nome</label><input type="text" id="bq-nome" placeholder="Nome completo"></div>
+        <div class="busca-field"><label>Seu WhatsApp</label><input type="text" id="bq-wpp" placeholder="(62) 99999-9999"></div>
+        <div class="busca-row">
+          <div class="busca-field"><label>Tipo</label><select id="bq-tipo"><option value="">Selecione</option><option>Casa</option><option>Apartamento</option><option>Terreno</option><option>Comercial</option></select></div>
+          <div class="busca-field"><label>Quartos</label><select id="bq-quartos"><option value="">Qualquer</option><option>1</option><option>2</option><option>3</option><option>4+</option></select></div>
+        </div>
+        <div class="busca-row">
+          <div class="busca-field"><label>Valor até</label><select id="bq-valor"><option value="">Selecione</option><option>R$ 200 mil</option><option>R$ 400 mil</option><option>R$ 600 mil</option><option>R$ 800 mil</option><option>Acima de R$ 800 mil</option></select></div>
+          <div class="busca-field"><label>Bairro preferido</label><input type="text" id="bq-bairro" placeholder="Ex: Setor Bueno"></div>
+        </div>
+        <button class="busca-btn" onclick="enviarBusca()">📲 Quero ser avisado</button>
+      </div>
+    </div>
+  </div>`;return;}
+  grid.innerHTML=lista.map((im,idx)=>{
+    const fotos=Array.isArray(im.fotos)?im.fotos.filter(f=>f):(im.foto?[im.foto]:[]);
+    const pf=fotos[0]||'';
+    const isFav=favoritos.includes(im.id);
+    const tagHtml=im.tag?`<span class="card-tag ${im.tag}">${im.tag==='novo'?'🟢 Novo':im.tag==='oportunidade'?'🟠 Oferta':'🟣 Destaque'}</span>`:'';
+    const feats=[im.quartos>0?`<span class="card-feat">🛏 ${im.quartos} qtos</span>`:'',im.banheiros>0?`<span class="card-feat">🚿 ${im.banheiros} ban</span>`:'',im.vagas>0?`<span class="card-feat">🚗 ${im.vagas} vaga${im.vagas>1?'s':''}</span>`:'',im.area>0?`<span class="card-feat">📐 ${im.area}m²</span>`:''].filter(Boolean);
+    return`<div class="card" style="animation-delay:${idx*.05}s">
+      <div class="card-img-wrap" onclick="abrirModal('${im.id}')">
+        ${pf?`<img src="${pf}" class="card-img" alt="${im.titulo}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder>🏠</div>'">`:'<div class="card-img-placeholder">🏠</div>'}
+        <div class="card-img-overlay"></div>
+        <span class="card-badge">${im.tipo}</span>
+        ${tagHtml}
+        ${fotos.length>1?`<span class="card-foto-count">📷 ${fotos.length} fotos</span>`:''}
+        <button class="btn-fav${isFav?' favoritado':''}" onclick="toggleFav('${im.id}',event)" title="${isFav?'Remover dos favoritos':'Adicionar aos favoritos'}">${isFav?'❤':'🤍'}</button>
+        <button class="card-del" onclick="event.stopPropagation();deletarImovel('${im.id}')">🗑</button>
+      </div>
+      <div class="card-body" onclick="abrirModal('${im.id}')">
+        <div class="card-price">${im.preco}</div>
+        <div class="card-title">${im.titulo}</div>
+        <div class="card-location">📍 ${im.local}</div>
+        <div class="card-desc">${im.desc||''}</div>
+        ${feats.length>0?`<div class="card-features">${feats.join('')}</div>`:''}
+      </div>
+      <div class="card-admin-btns">
+        <button class="card-btn-edit" onclick="editarImovel('${im.id}')">✏ Editar</button>
+        <button class="card-btn-del" onclick="deletarImovel('${im.id}')">🗑 Excluir</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.filtrar=function(tipo,btn){filtroAtual=tipo;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();};
+window.buscar=function(){termoBusca=document.getElementById('search-input').value;filtroPreco=document.getElementById('price-filter').value;filtroQuartos=document.getElementById('quartos-filter').value;render();};
+
+// ===== GALERIA =====
+function renderGaleria(){
+  const galeria=document.getElementById('modal-galeria'),placeholder=document.getElementById('modal-placeholder'),prev=document.getElementById('galeria-prev'),next=document.getElementById('galeria-next'),dots=document.getElementById('galeria-dots'),counter=document.getElementById('galeria-counter');
+  galeria.querySelectorAll('.galeria-img').forEach(el=>el.remove());
+  if(galeriaFotos.length===0){placeholder.style.display='flex';prev.style.display=next.style.display=counter.style.display='none';dots.innerHTML='';return;}
+  placeholder.style.display='none';
+  galeriaFotos.forEach((url,i)=>{const img=document.createElement('img');img.src=url;img.className='galeria-img'+(i===galeriaIndex?' ativo':'');img.onerror=function(){this.style.display='none';};galeria.insertBefore(img,prev);});
+  if(galeriaFotos.length>1){prev.style.display=next.style.display='flex';counter.style.display='block';counter.textContent=`${galeriaIndex+1} / ${galeriaFotos.length}`;dots.innerHTML=galeriaFotos.map((_,i)=>`<button class="galeria-dot${i===galeriaIndex?' ativo':''}" onclick="galeriaIr(${i})"></button>`).join('');}
+  else{prev.style.display=next.style.display=counter.style.display='none';dots.innerHTML='';}
+}
+window.galeriaNav=function(dir){galeriaIndex=(galeriaIndex+dir+galeriaFotos.length)%galeriaFotos.length;renderGaleria();};
+window.galeriaIr=function(i){galeriaIndex=i;renderGaleria();};
+
+// ===== MODAL =====
+window.abrirModal=function(id){
+  const im=imoveis.find(i=>i.id===id);if(!im)return;
+  imovelAtual=im;
+  galeriaFotos=Array.isArray(im.fotos)?im.fotos.filter(f=>f):(im.foto?[im.foto]:[]);galeriaIndex=0;renderGaleria();
+  document.getElementById('modal-tipo').textContent=im.tipo;
+  document.getElementById('modal-preco').textContent=im.preco;
+  document.getElementById('modal-titulo').textContent=im.titulo;
+  document.getElementById('modal-local').innerHTML='📍 '+im.local;
+  document.getElementById('modal-desc').textContent=im.desc||'';
+  // vídeo
+  const videoWrap=document.getElementById('modal-video-wrap');
+  const videoEl=document.getElementById('modal-video');
+  if(im.video){videoWrap.style.display='block';videoEl.src=im.video;}
+  else{videoWrap.style.display='none';videoEl.src='';}
+  // tag
+  const tagEl=document.getElementById('modal-tag-inline');
+  if(im.tag){tagEl.style.display='inline-block';tagEl.className='modal-tag-inline '+im.tag;tagEl.textContent=im.tag==='novo'?'🟢 Novo':im.tag==='oportunidade'?'🟠 Oportunidade':'🟣 Destaque';}
+  else{tagEl.style.display='none';}
+  document.getElementById('modal-features').innerHTML=[im.quartos>0?`<span>🛏 ${im.quartos} Quartos</span>`:'',im.banheiros>0?`<span>🚿 ${im.banheiros} Banheiros</span>`:'',im.vagas>0?`<span>🚗 ${im.vagas} Vagas</span>`:'',im.area>0?`<span>📐 ${im.area}m²</span>`:'']. join('');
+  const wpp=im.wpp||whatsappGlobal,msg=encodeURIComponent(`Olá! Vi no catálogo e tenho interesse: *${im.titulo}* — ${im.preco}. Podemos conversar?`);
+  document.getElementById('modal-wpp').href=`https://wa.me/55${wpp}?text=${msg}`;
+  document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';
+};
+window.fecharModal=function(e){if(e&&e.target!==document.getElementById('modal'))return;document.getElementById('modal').classList.remove('open');document.body.style.overflow='';};
+
+// ===== COMPARTILHAR =====
+window.compartilhar=function(){
+  if(!imovelAtual)return;
+  const txt=`🏠 *${imovelAtual.titulo}*\n💰 ${imovelAtual.preco}\n📍 ${imovelAtual.local}\n\nVeja mais imóveis: ${window.location.href}`;
+  if(navigator.share){navigator.share({title:imovelAtual.titulo,text:txt,url:window.location.href}).catch(()=>{});}
+  else{navigator.clipboard.writeText(txt).then(()=>mostrarToast('📋 Link copiado!')).catch(()=>mostrarToast('Use o botão de compartilhar do seu celular'));}
+};
+
+// ===== CONTATO =====
+window.abrirContato=function(){document.getElementById('contato-overlay').classList.add('open');document.body.style.overflow='hidden';};
+window.fecharContato=function(e){if(e&&e.target!==document.getElementById('contato-overlay'))return;document.getElementById('contato-overlay').classList.remove('open');document.body.style.overflow='';};
+
+function atualizarContato(){
+  const msg=encodeURIComponent('Olá! Gostaria de saber mais sobre seus imóveis.');
+  const wppLink=`https://wa.me/55${whatsappGlobal}?text=${msg}`;
+  document.getElementById('btn-whats-header').href=wppLink;
+  document.getElementById('contato-wpp').href=wppLink;
+  document.getElementById('contato-wpp-num').textContent=whatsappGlobal?`(${whatsappGlobal.slice(0,2)}) ${whatsappGlobal.slice(2,7)}-${whatsappGlobal.slice(7)}`:'—';
+  if(document.getElementById('wpp-float-link'))document.getElementById('wpp-float-link').href=wppLink;
+  if(document.getElementById('wpp-banner-link'))document.getElementById('wpp-banner-link').href=wppLink;
+}
+
+// ===== ADMIN =====
+window.toggleAdmin=function(){adminAberto=!adminAberto;document.getElementById('admin-bar').classList.toggle('open',adminAberto);document.body.classList.toggle('admin-mode',adminAberto);if(!adminAberto){document.getElementById('admin').classList.remove('open');document.body.style.overflow='';cancelarEdicao();}};
+window.abrirFormAdicionar=function(){cancelarEdicao();document.getElementById('admin').classList.add('open');document.body.style.overflow='hidden';};
+window.fecharPainelAdmin=function(){document.getElementById('admin').classList.remove('open');document.body.style.overflow='';cancelarEdicao();};
+window.adicionarCampoFoto=function(){const lista=document.getElementById('fotos-lista'),div=document.createElement('div');div.className='foto-item';div.innerHTML='<input type="text" placeholder="https://i.imgur.com/exemplo.jpg"><button onclick="removerFoto(this)">✕</button>';lista.appendChild(div);};
+window.removerFoto=function(btn){const lista=document.getElementById('fotos-lista');if(lista.children.length>1)btn.parentElement.remove();else btn.previousElementSibling.value='';};
+
+function coletarDadosForm(){
+  const linksForm=Array.from(document.querySelectorAll('#fotos-lista input')).map(i=>i.value.trim()).filter(v=>v);
+  const todasFotos=[...fotosBase64,...linksForm];
+  return{titulo:document.getElementById('f-titulo').value.trim(),tipo:document.getElementById('f-tipo').value,preco:document.getElementById('f-preco').value.trim(),local:document.getElementById('f-local').value.trim(),quartos:parseInt(document.getElementById('f-quartos').value)||0,banheiros:parseInt(document.getElementById('f-banheiros').value)||0,vagas:parseInt(document.getElementById('f-vagas').value)||0,area:parseInt(document.getElementById('f-area').value)||0,desc:document.getElementById('f-desc').value.trim(),wpp:document.getElementById('f-wpp').value.trim(),tag:document.getElementById('f-tag').value,fotos:todasFotos,video:videoBase64||''};
+}
+function limparForm(){['f-titulo','f-preco','f-local','f-quartos','f-banheiros','f-vagas','f-area','f-desc','f-wpp'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-tag').value='';document.getElementById('fotos-lista').innerHTML='<div class="foto-item"><input type="text" placeholder="https://i.imgur.com/exemplo.jpg"><button onclick="removerFoto(this)">✕</button></div>';fotosBase64=[];renderPreview();removerVideo();}
+
+window.salvarImovel=async function(){
+  const dados=coletarDadosForm();
+  if(!dados.titulo||!dados.preco||!dados.local){alert('Preencha pelo menos: título, preço e localização.');return;}
+  if(dados.wpp){whatsappGlobal=dados.wpp;atualizarContato();}
+  const btn=document.getElementById('btn-salvar');btn.disabled=true;btn.textContent='⏳ Salvando...';
+  try{
+    if(modoEdicaoId){await updateDoc(doc(db,"imoveis",modoEdicaoId),{...dados});mostrarToast('✏ Imóvel atualizado!');}
+    else{await addDoc(collection(db,"imoveis"),{...dados,criadoEm:Date.now()});mostrarToast('✓ Imóvel adicionado!');}
+    await carregarImoveis();fecharPainelAdmin();
+  }catch(e){mostrarToast('⚠ Erro ao salvar. Tente novamente.');}
+  btn.disabled=false;btn.textContent=modoEdicaoId?'✓ Salvar Alterações':'✓ Adicionar ao Catálogo';
+};
+
+window.editarImovel=function(id){
+  const im=imoveis.find(i=>i.id===id);if(!im)return;modoEdicaoId=id;
+  document.getElementById('f-titulo').value=im.titulo||'';document.getElementById('f-tipo').value=im.tipo||'Residencial';document.getElementById('f-preco').value=im.preco||'';document.getElementById('f-local').value=im.local||'';document.getElementById('f-quartos').value=im.quartos||'';document.getElementById('f-banheiros').value=im.banheiros||'';document.getElementById('f-vagas').value=im.vagas||'';document.getElementById('f-area').value=im.area||'';document.getElementById('f-desc').value=im.desc||'';document.getElementById('f-wpp').value=im.wpp||'';document.getElementById('f-tag').value=im.tag||'';
+  const fotos=Array.isArray(im.fotos)?im.fotos.filter(f=>f):(im.foto?[im.foto]:[]),lista=document.getElementById('fotos-lista');lista.innerHTML='';
+  (fotos.length>0?fotos:['']).forEach(url=>{const div=document.createElement('div');div.className='foto-item';div.innerHTML=`<input type="text" value="${url}" placeholder="https://i.imgur.com/exemplo.jpg"><button onclick="removerFoto(this)">✕</button>`;lista.appendChild(div);});
+  document.getElementById('admin-titulo').textContent='Editar Imóvel';document.getElementById('edit-indicator').style.display='block';document.getElementById('btn-salvar').textContent='✓ Salvar Alterações';document.getElementById('btn-cancelar').style.display='block';document.getElementById('admin').classList.add('open');document.body.style.overflow='hidden';
+};
+
+window.cancelarEdicao=function(){modoEdicaoId=null;document.getElementById('admin-titulo').textContent='Adicionar Imóvel';document.getElementById('edit-indicator').style.display='none';document.getElementById('btn-salvar').textContent='✓ Adicionar ao Catálogo';document.getElementById('btn-cancelar').style.display='none';limparForm();document.getElementById('admin').classList.remove('open');document.body.style.overflow='';};
+window.deletarImovel=async function(id){if(!confirm('Deseja excluir este imóvel?'))return;try{await deleteDoc(doc(db,"imoveis",id));mostrarToast('🗑 Imóvel removido.');await carregarImoveis();}catch(e){mostrarToast('⚠ Erro ao excluir.');}};
+
+function mostrarToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+// ===== UPLOAD COM COMPRESSÃO AUTOMÁTICA =====
+let fotosBase64=[];
+let videoBase64=null;
+
+window.handleVideo=function(file){
+  if(!file)return;
+  if(file.size>80*1024*1024){mostrarToast('⚠ Vídeo muito grande. Use até 80MB.');return;}
+  mostrarToast('⏳ Carregando vídeo...');
+  const reader=new FileReader();
+  reader.onload=function(e){
+    videoBase64=e.target.result;
+    document.getElementById('video-preview').src=videoBase64;
+    document.getElementById('video-preview-wrap').style.display='block';
+    document.getElementById('upload-video-area').style.display='none';
+    mostrarToast('✓ Vídeo carregado!');
+  };
+  reader.readAsDataURL(file);
+};
+window.removerVideo=function(){
+  videoBase64=null;
+  document.getElementById('video-preview').src='';
+  document.getElementById('video-preview-wrap').style.display='none';
+  document.getElementById('upload-video-area').style.display='block';
+  document.getElementById('input-video').value='';
+};
+
+function comprimirImagem(file,maxW=1200,quality=0.75){
+  return new Promise(resolve=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        let w=img.width,h=img.height;
+        if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+window.handleFiles=async function(files){
+  mostrarToast('⏳ Comprimindo fotos...');
+  for(const file of Array.from(files)){
+    if(!file.type.startsWith('image/'))continue;
+    const compressed=await comprimirImagem(file);
+    fotosBase64.push(compressed);
+    renderPreview();
+  }
+  mostrarToast(`✓ ${files.length} foto${files.length>1?'s':''} adicionada${files.length>1?'s':''}`);
+};
+
+window.handleDrop=function(event){
+  event.preventDefault();
+  document.getElementById('upload-area').classList.remove('dragover');
+  handleFiles(event.dataTransfer.files);
+};
+
+function renderPreview(){
+  const c=document.getElementById('fotos-preview');
+  c.innerHTML=fotosBase64.map((src,i)=>`<div class="preview-item"><img src="${src}" alt="Foto ${i+1}"><button class="preview-remove" onclick="removerPreview(${i})">✕</button>${i===0?'<div class="preview-principal">Principal</div>':''}</div>`).join('');
+}
+
+window.removerPreview=function(idx){fotosBase64.splice(idx,1);renderPreview();};
+
+// Integrar fotos base64 ao salvar
+const _salvarOriginal=window.salvarImovel;
+window.salvarImovel=async function(){
+  // Coletar links manuais
+  const linksForm=Array.from(document.querySelectorAll('#fotos-lista input')).map(i=>i.value.trim()).filter(v=>v);
+  // Juntar base64 + links
+  const todasFotos=[...fotosBase64,...linksForm];
+  if(todasFotos.length===0&&!document.getElementById('f-titulo').value.trim()){alert('Preencha pelo menos: título, preço e localização.');return;}
+  // Temporariamente sobrescrever o campo de fotos para o salvar original
+  window._fotosParaSalvar=todasFotos;
+  await _salvarOriginal();
+};
+
+// Limpar preview ao fechar/cancelar
+const _cancelarOriginal=window.cancelarEdicao;
+window.cancelarEdicao=function(){fotosBase64=[];renderPreview();if(_cancelarOriginal)_cancelarOriginal();};
+const _fecharOriginal=window.fecharPainelAdmin;
+window.fecharPainelAdmin=function(){fotosBase64=[];renderPreview();if(_fecharOriginal)_fecharOriginal();};
+
+// ===== IA — PREENCHER FORMULÁRIO =====
+window.abrirIAPreencher=function(){
+  document.getElementById('ia-panel').style.display='block';
+  document.getElementById('ia-texto').value='';
+  setTimeout(()=>document.getElementById('ia-texto').focus(),100);
+};
+window.fecharIAPreencher=function(){
+  document.getElementById('ia-panel').style.display='none';
+};
+window.processarIA=async function(){
+  const texto=document.getElementById('ia-texto').value.trim();
+  if(!texto){mostrarToast('⚠ Cole o descritivo antes de processar.');return;}
+  const btn=document.getElementById('btn-ia-processar');
+  btn.disabled=true;btn.textContent='⏳ Processando...';
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:`Analise este descritivo de imóvel e extraia as informações no formato JSON abaixo. Responda APENAS o JSON puro, sem texto adicional, sem markdown, sem backticks.\n\nDescritivo:\n${texto}\n\nFormato JSON exato (use 0 para números não informados, string vazia para textos não informados):\n{"titulo":"título comercial atrativo máx 60 chars","tipo":"Residencial","preco":"R$ 000.000","local":"bairro cidade","quartos":0,"banheiros":0,"vagas":0,"area":0,"tag":"destaque","desc":"descrição comercial atrativa 3-4 linhas"}`}]
+      })
+    });
+    const data=await resp.json();
+    const txt=data.content[0].text.trim().replace(/```json|```/g,'');
+    const json=JSON.parse(txt);
+    if(json.titulo)document.getElementById('f-titulo').value=json.titulo;
+    if(json.tipo)document.getElementById('f-tipo').value=json.tipo;
+    if(json.preco)document.getElementById('f-preco').value=json.preco;
+    if(json.local)document.getElementById('f-local').value=json.local;
+    if(json.quartos)document.getElementById('f-quartos').value=json.quartos;
+    if(json.banheiros)document.getElementById('f-banheiros').value=json.banheiros;
+    if(json.vagas)document.getElementById('f-vagas').value=json.vagas;
+    if(json.area)document.getElementById('f-area').value=json.area;
+    if(json.tag)document.getElementById('f-tag').value=json.tag;
+    if(json.desc)document.getElementById('f-desc').value=json.desc;
+    fecharIAPreencher();
+    mostrarToast('✨ Formulário preenchido! Revise e salve.');
+  }catch(e){mostrarToast('⚠ Erro ao processar. Tente novamente.');}
+  btn.disabled=false;btn.textContent='✨ Preencher Formulário';
+};
+
+// ===== BUSCAR IMÓVEL (formulário vazio) =====
+window.enviarBusca=function(){
+  const nome=document.getElementById('bq-nome').value.trim();
+  const wpp=document.getElementById('bq-wpp').value.trim();
+  const tipo=document.getElementById('bq-tipo').value;
+  const quartos=document.getElementById('bq-quartos').value;
+  const valor=document.getElementById('bq-valor').value;
+  const bairro=document.getElementById('bq-bairro').value.trim();
+  if(!nome||!wpp){mostrarToast('⚠ Preencha pelo menos seu nome e WhatsApp.');return;}
+  const msg=`Olá Estephaní! Não encontrei o imóvel que busco no seu catálogo. Pode me avisar quando tiver? 🏠\n\n🔍 *O que estou procurando:*\n👤 Nome: ${nome}\n📱 WhatsApp: ${wpp}\n🏡 Tipo: ${tipo||'Qualquer'}\n🛏 Quartos: ${quartos||'Qualquer'}\n💰 Valor até: ${valor||'A combinar'}\n📍 Bairro preferido: ${bairro||'Qualquer'}\n\nAguardo seu contato!`;
+  const numero=whatsappGlobal||'62981860902';
+  window.open(`https://wa.me/55${numero}?text=${encodeURIComponent(msg)}`,'_blank');
+  mostrarToast('✓ Abrindo WhatsApp...');
+};
+
+window.abrirModalBusca=function(){
+  document.getElementById('modal-busca').style.display='flex';
+  document.body.style.overflow='hidden';
+};
+window.fecharModalBusca=function(e){
+  if(!e||e.target===document.getElementById('modal-busca')){
+    document.getElementById('modal-busca').style.display='none';
+    document.body.style.overflow='';
+  }
+};
+window.enviarBuscaModal=function(){
+  const nome=document.getElementById('mbq-nome').value.trim();
+  const wpp=document.getElementById('mbq-wpp').value.trim();
+  const tipo=document.getElementById('mbq-tipo').value;
+  const quartos=document.getElementById('mbq-quartos').value;
+  const valor=document.getElementById('mbq-valor').value;
+  const bairro=document.getElementById('mbq-bairro').value.trim();
+  if(!nome||!wpp){mostrarToast('⚠ Preencha pelo menos seu nome e WhatsApp.');return;}
+  const msg=`Olá Estephaní! Não encontrei o imóvel que busco no seu catálogo. Pode me avisar quando tiver? 🏠\n\n🔍 *O que estou procurando:*\n👤 Nome: ${nome}\n📱 WhatsApp: ${wpp}\n🏡 Tipo: ${tipo||'Qualquer'}\n🛏 Quartos: ${quartos||'Qualquer'}\n💰 Valor até: ${valor||'A combinar'}\n📍 Bairro preferido: ${bairro||'Qualquer'}\n\nAguardo seu contato!`;
+  const numero=whatsappGlobal||'62981860902';
+  window.open(`https://wa.me/55${numero}?text=${encodeURIComponent(msg)}`,'_blank');
+  fecharModalBusca();
+  mostrarToast('✓ Abrindo WhatsApp...');
+};
+
+// ===== ANÁLISE DE CRÉDITO =====
+window.enviarAnalise=function(){
+  const nome=document.getElementById('cr-nome').value.trim();
+  const wpp=document.getElementById('cr-wpp').value.trim();
+  const cpfNum=document.getElementById('cr-cpf-num').value.trim();
+  const tipoImovel=document.getElementById('cr-tipo-imovel').value;
+  const renda=document.getElementById('cr-renda').value;
+  const valor=document.getElementById('cr-valor').value;
+  const fgts=document.getElementById('cr-fgts').value;
+  const cpf=document.getElementById('cr-cpf').value;
+  if(!nome||!wpp||!cpfNum||!renda||!valor){mostrarToast('⚠ Preencha nome, WhatsApp, CPF, renda e valor.');return;}
+  const msg=`Olá Estephaní! Quero fazer minha análise de crédito gratuita! 🏠\n\n📋 *Meus dados:*\n👤 Nome: ${nome}\n📱 WhatsApp: ${wpp}\n🪪 CPF: ${cpfNum}\n🏡 Tipo de imóvel: ${tipoImovel||'Não informado'}\n💰 Renda mensal: ${renda}\n💵 Valor que busco: ${valor}\n💼 Tenho FGTS: ${fgts||'Não informado'}\n📄 Restrição no CPF: ${cpf||'Não informado'}\n\nAguardo seu retorno!`;
+  const numero=whatsappGlobal||'62981860902';
+  window.open(`https://wa.me/55${numero}?text=${encodeURIComponent(msg)}`,'_blank');
+  mostrarToast('✓ Abrindo WhatsApp...');
+};
+
+atualizarBadgeFavs();
+carregarImoveis();
+</script>
+</body>
+</html>
