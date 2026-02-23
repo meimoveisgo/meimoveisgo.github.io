@@ -398,13 +398,27 @@ body.admin-mode{padding-bottom:70px}
     <h1>O imóvel <em>certo</em><span class="line2">para cada momento.</span></h1>
     <p class="hero-sub">Qualidade, confiança e os melhores imóveis selecionados para você. Seu próximo lar ou investimento começa aqui.</p>
     <div class="hero-stats">
-      <div><span class="stat-num" id="stat-count">—</span><span class="stat-label">Imóveis Disponíveis</span></div>
+      <div><span class="stat-num" id="stat-count">...</span><span class="stat-label">Imóveis Disponíveis</span></div>
       <div><span class="stat-num">100%</span><span class="stat-label">Confiança Garantida</span></div>
       <div><span class="stat-num">24h</span><span class="stat-label">Atendimento Rápido</span></div>
     </div>
   </div>
   <div class="hero-deco">M</div>
 </section>
+
+<!-- Aplica cache instantâneo no contador, sem esperar Firebase -->
+<script>
+(function(){
+  try{
+    var cached=localStorage.getItem('me_imoveis_cache');
+    if(cached){
+      var lista=JSON.parse(cached);
+      var el=document.getElementById('stat-count');
+      if(el&&lista.length>0) el.textContent=lista.length;
+    }
+  }catch(e){}
+})();
+</script>
 
 <!-- BUSCA -->
 <div class="search-bar">
@@ -464,7 +478,14 @@ body.admin-mode{padding-bottom:70px}
 </div>
 
 <div class="section">
-  <div class="grid" id="grid"><div class="loading-msg">Carregando imóveis...</div></div>
+  <div class="grid" id="grid">
+    <div class="card-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line skel-price"></div><div class="skel-line skel-title"></div><div class="skel-line skel-local"></div><div class="skel-line skel-desc"></div></div></div>
+    <div class="card-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line skel-price"></div><div class="skel-line skel-title"></div><div class="skel-line skel-local"></div><div class="skel-line skel-desc"></div></div></div>
+    <div class="card-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line skel-price"></div><div class="skel-line skel-title"></div><div class="skel-line skel-local"></div><div class="skel-line skel-desc"></div></div></div>
+    <div class="card-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line skel-price"></div><div class="skel-line skel-title"></div><div class="skel-line skel-local"></div><div class="skel-line skel-desc"></div></div></div>
+    <div class="card-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line skel-price"></div><div class="skel-line skel-title"></div><div class="skel-line skel-local"></div><div class="skel-line skel-desc"></div></div></div>
+    <div class="card-skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line skel-price"></div><div class="skel-line skel-title"></div><div class="skel-line skel-local"></div><div class="skel-line skel-desc"></div></div></div>
+  </div>
 </div>
 
 <!-- MODAL IMÓVEL -->
@@ -613,7 +634,7 @@ body.admin-mode{padding-bottom:70px}
 <!-- RODAPÉ -->
 <footer class="footer">
   <div class="footer-logo">M&amp;E Imóveis</div>
-  <div class="footer-info">Corretora Autônoma · Goiânia, GO<br><span style="color:var(--muted)">phani.paixao@gmail.com · (62) 98186-0902</span></div>
+  <div class="footer-info">Corretora Autônoma · Goiânia, GO<br><span style="color:var(--muted)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2e5e464f4047005e4f47564f416e49434f4742004d4143">[email&#160;protected]</a> · (62) 98186-0902</span></div>
   <div class="footer-creci">CRECI · GO<br><span style="color:var(--muted);font-size:.6rem">© 2025 M&amp;E Imóveis</span></div>
 </footer>
 
@@ -743,7 +764,7 @@ body.admin-mode{padding-bottom:70px}
 
 <div class="toast" id="toast"></div>
 
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import{getFirestore,collection,addDoc,getDocs,deleteDoc,doc,updateDoc,orderBy,query}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -798,33 +819,60 @@ window.verificarSenha=function(){
   else{document.getElementById('senha-erro').textContent='Senha incorreta. Tente novamente.';document.getElementById('senha-input').value='';}
 };
 
-// ===== CARREGAR COM CACHE =====
+// ===== CARREGAR COM CACHE AGRESSIVO =====
 async function carregarImoveis(){
-  // Mostrar skeleton enquanto carrega
   mostrarSkeleton();
-  try{
-    // Cache local — carrega instantâneo na segunda visita
-    const cacheKey='me_imoveis_cache';
-    const cacheTime='me_imoveis_cache_time';
-    const cached=localStorage.getItem(cacheKey);
-    const cachedAt=parseInt(localStorage.getItem(cacheTime)||'0');
-    const agora=Date.now();
-    // Usa cache se tiver menos de 5 minutos
-    if(cached&&(agora-cachedAt)<5*60*1000){
+  const cacheKey='me_imoveis_cache';
+  const cacheTime='me_imoveis_cache_time';
+  const cached=localStorage.getItem(cacheKey);
+  const cachedAt=parseInt(localStorage.getItem(cacheTime)||'0');
+  const agora=Date.now();
+
+  // SEMPRE usa o cache imediatamente se existir (independente da idade)
+  if(cached){
+    try{
       imoveis=JSON.parse(cached);
       if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
       document.getElementById('stat-count').textContent=imoveis.length||'0';
       render();
+    }catch(e){imoveis=[];}
+  }
+
+  // Atualiza do Firebase em background sem bloquear a tela
+  // Se tiver cache recente (< 3min) e já renderizou, não precisa buscar agora
+  const cacheRecente=cached&&(agora-cachedAt)<3*60*1000;
+  if(cacheRecente&&imoveis.length>0){
+    // Atualiza silenciosamente após 2s para não competir com a renderização
+    setTimeout(()=>atualizarDoFirebase(cacheKey,cacheTime),2000);
+    return;
+  }
+
+  // Cache velho ou vazio: busca no Firebase com timeout de 10s
+  await atualizarDoFirebase(cacheKey,cacheTime);
+}
+
+async function atualizarDoFirebase(cacheKey,cacheTime){
+  try{
+    const timeoutPromise=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000));
+    const q=query(collection(db,"imoveis"),orderBy("criadoEm","desc"));
+    const snap=await Promise.race([getDocs(q),timeoutPromise]);
+    const novos=snap.docs.map(d=>({id:d.id,...d.data()}));
+    localStorage.setItem(cacheKey,JSON.stringify(novos));
+    localStorage.setItem(cacheTime,String(Date.now()));
+    // Só re-renderiza se houve mudança
+    if(JSON.stringify(novos.map(i=>i.id))!==JSON.stringify(imoveis.map(i=>i.id))){
+      imoveis=novos;
+      if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
+      document.getElementById('stat-count').textContent=imoveis.length||'0';
+      render();
     }
-    // Busca no Firebase em paralelo (atualiza silenciosamente)
-    const q=query(collection(db,"imoveis"),orderBy("criadoEm","desc")),snap=await getDocs(q);
-    imoveis=snap.docs.map(d=>({id:d.id,...d.data()}));
-    localStorage.setItem(cacheKey,JSON.stringify(imoveis));
-    localStorage.setItem(cacheTime,String(agora));
-    if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
-    document.getElementById('stat-count').textContent=imoveis.length||'0';
-    render();
-  }catch(e){document.getElementById('grid').innerHTML='<div class="loading-msg">⚠ Erro ao carregar. Verifique a conexão.</div>';}
+  }catch(e){
+    // Se não há cache e falhou, mostra erro
+    if(imoveis.length===0){
+      document.getElementById('grid').innerHTML='<div class="loading-msg">⚠ Sem conexão. Tente novamente.</div>';
+    }
+    // Se há cache, mantém o que está na tela silenciosamente
+  }
 }
 
 function mostrarSkeleton(){
@@ -1193,13 +1241,4 @@ window.enviarAnalise=function(){
   const cpf=document.getElementById('cr-cpf').value;
   if(!nome||!wpp||!cpfNum||!renda||!valor){mostrarToast('⚠ Preencha nome, WhatsApp, CPF, renda e valor.');return;}
   const msg=`Olá Estephaní! Quero fazer minha análise de crédito gratuita! 🏠\n\n📋 *Meus dados:*\n👤 Nome: ${nome}\n📱 WhatsApp: ${wpp}\n🪪 CPF: ${cpfNum}\n🏡 Tipo de imóvel: ${tipoImovel||'Não informado'}\n💰 Renda mensal: ${renda}\n💵 Valor que busco: ${valor}\n💼 Tenho FGTS: ${fgts||'Não informado'}\n📄 Restrição no CPF: ${cpf||'Não informado'}\n\nAguardo seu retorno!`;
-  const numero=whatsappGlobal||'62981860902';
-  window.open(`https://wa.me/55${numero}?text=${encodeURIComponent(msg)}`,'_blank');
-  mostrarToast('✓ Abrindo WhatsApp...');
-};
-
-atualizarBadgeFavs();
-carregarImoveis();
-</script>
-</body>
-</html>
+  const nume
