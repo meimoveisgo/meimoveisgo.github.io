@@ -821,34 +821,32 @@ window.verificarSenha=function(){
 
 // ===== CARREGAR COM CACHE AGRESSIVO =====
 async function carregarImoveis(){
-  mostrarSkeleton();
   const cacheKey='me_imoveis_cache';
   const cacheTime='me_imoveis_cache_time';
   const cached=localStorage.getItem(cacheKey);
   const cachedAt=parseInt(localStorage.getItem(cacheTime)||'0');
   const agora=Date.now();
 
-  // SEMPRE usa o cache imediatamente se existir (independente da idade)
+  // SEMPRE usa o cache imediatamente se existir — mostra os imóveis na hora
   if(cached){
     try{
       imoveis=JSON.parse(cached);
       if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
       document.getElementById('stat-count').textContent=imoveis.length||'0';
-      render();
-    }catch(e){imoveis=[];}
+      render(); // renderiza agora com o cache
+    }catch(e){imoveis=[];mostrarSkeleton();}
+  } else {
+    mostrarSkeleton(); // só mostra skeleton se não tiver cache nenhum
   }
 
-  // Atualiza do Firebase em background sem bloquear a tela
-  // Se tiver cache recente (< 3min) e já renderizou, não precisa buscar agora
+  // Se cache tem menos de 3min, atualiza Firebase em background após 3s (sem pressa)
   const cacheRecente=cached&&(agora-cachedAt)<3*60*1000;
   if(cacheRecente&&imoveis.length>0){
-    // Atualiza silenciosamente após 2s para não competir com a renderização
-    setTimeout(()=>atualizarDoFirebase(cacheKey,cacheTime),2000);
-    return;
+    setTimeout(()=>atualizarDoFirebase(cacheKey,cacheTime),3000);
+  } else {
+    // Cache velho ou vazio: busca Firebase agora (mas tela já está visível com cache ou skeleton)
+    await atualizarDoFirebase(cacheKey,cacheTime);
   }
-
-  // Cache velho ou vazio: busca no Firebase com timeout de 10s
-  await atualizarDoFirebase(cacheKey,cacheTime);
 }
 
 async function atualizarDoFirebase(cacheKey,cacheTime){
@@ -859,19 +857,15 @@ async function atualizarDoFirebase(cacheKey,cacheTime){
     const novos=snap.docs.map(d=>({id:d.id,...d.data()}));
     localStorage.setItem(cacheKey,JSON.stringify(novos));
     localStorage.setItem(cacheTime,String(Date.now()));
-    // Só re-renderiza se houve mudança
-    if(JSON.stringify(novos.map(i=>i.id))!==JSON.stringify(imoveis.map(i=>i.id))){
-      imoveis=novos;
-      if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
-      document.getElementById('stat-count').textContent=imoveis.length||'0';
-      render();
-    }
+    imoveis=novos;
+    if(imoveis.length>0&&imoveis[0].wpp){whatsappGlobal=imoveis[0].wpp;atualizarContato();}
+    document.getElementById('stat-count').textContent=imoveis.length||'0';
+    render(); // sempre renderiza após buscar no Firebase
   }catch(e){
-    // Se não há cache e falhou, mostra erro
     if(imoveis.length===0){
-      document.getElementById('grid').innerHTML='<div class="loading-msg">⚠ Sem conexão. Tente novamente.</div>';
+      document.getElementById('grid').innerHTML='<div class="loading-msg">⚠ Sem conexão. Tente novamente em alguns instantes.</div>';
     }
-    // Se há cache, mantém o que está na tela silenciosamente
+    // Se já tem imóveis na tela (do cache), não faz nada — mantém o que está
   }
 }
 
@@ -895,16 +889,16 @@ function extrairPreco(str){return parseInt((str||'').replace(/\D/g,''))||0;}
 // ===== RENDER =====
 function render(){
   const grid=document.getElementById('grid');
-  let lista=filtroAtual==='todos'?imoveis:imoveis.filter(i=>i.tipo===filtroAtual);
+  let lista=filtroAtual==='todos'?imoveis:imoveis.filter(i=>(i.tipo||'').toLowerCase()===filtroAtual.toLowerCase());
   if(termoBusca){const t=termoBusca.toLowerCase();lista=lista.filter(i=>(i.titulo||'').toLowerCase().includes(t)||(i.local||'').toLowerCase().includes(t)||(i.desc||'').toLowerCase().includes(t));}
   if(filtroPreco){const max=parseInt(filtroPreco);lista=lista.filter(i=>extrairPreco(i.preco)<=max);}
   if(filtroQuartos){const q=parseInt(filtroQuartos);lista=lista.filter(i=>filtroQuartos==='4'?i.quartos>=4:i.quartos===q);}
   document.getElementById('grid-count').textContent=lista.length>0?`${lista.length} imóve${lista.length===1?'l':'is'} encontrado${lista.length===1?'':'s'}`:'';
   if(lista.length===0){
-    const tipoNome=filtroAtual==='todos'?'imóveis':filtroAtual==='casa'?'casas':filtroAtual==='apartamento'?'apartamentos':filtroAtual==='terreno'?'terrenos':'imóveis comerciais';
+    const tipoNome=filtroAtual==='todos'?'imóveis':filtroAtual==='Residencial'?'imóveis residenciais':filtroAtual==='Comercial'?'imóveis comerciais':'terrenos';
     grid.innerHTML=`<div class="no-imoveis" style="background:#F8FAFC;border:1px solid #E2E8F0;">
     <div style="font-size:2.5rem;margin-bottom:16px">🔍</div>
-    <h3>Nenhum${filtroAtual==='apartamento'?' apartamento':filtroAtual==='terreno'?' terreno':filtroAtual==='casa'?' casa':filtroAtual==='comercial'?' imóvel comercial':' imóvel'} disponível no momento</h3>
+    <h3>Nenhum imóvel disponível no momento</h3>
     <p style="font-size:.78rem;margin-top:8px;color:#555;margin-bottom:24px">Deixe seus dados e te aviso assim que surgir uma opção de <strong>${tipoNome}</strong>!</p>
     <div class="busca-form">
       <div class="busca-form-title">📋 Me conta o que você procura</div>
@@ -912,7 +906,7 @@ function render(){
         <div class="busca-field"><label>Seu nome</label><input type="text" id="bq-nome" placeholder="Nome completo"></div>
         <div class="busca-field"><label>Seu WhatsApp</label><input type="text" id="bq-wpp" placeholder="(62) 99999-9999"></div>
         <div class="busca-row">
-          <div class="busca-field"><label>Tipo</label><select id="bq-tipo"><option value="">Selecione</option><option>Casa</option><option>Apartamento</option><option>Terreno</option><option>Comercial</option></select></div>
+          <div class="busca-field"><label>Tipo</label><select id="bq-tipo"><option value="">Selecione</option><option>Residencial</option><option>Comercial</option><option>Terreno</option></select></div>
           <div class="busca-field"><label>Quartos</label><select id="bq-quartos"><option value="">Qualquer</option><option>1</option><option>2</option><option>3</option><option>4+</option></select></div>
         </div>
         <div class="busca-row">
@@ -929,20 +923,20 @@ function render(){
     const isFav=favoritos.includes(im.id);
     const tagHtml=im.tag?`<span class="card-tag ${im.tag}">${im.tag==='novo'?'🟢 Novo':im.tag==='oportunidade'?'🟠 Oferta':'🟣 Destaque'}</span>`:'';
     const feats=[im.quartos>0?`<span class="card-feat">🛏 ${im.quartos} qtos</span>`:'',im.banheiros>0?`<span class="card-feat">🚿 ${im.banheiros} ban</span>`:'',im.vagas>0?`<span class="card-feat">🚗 ${im.vagas} vaga${im.vagas>1?'s':''}</span>`:'',im.area>0?`<span class="card-feat">📐 ${im.area}m²</span>`:''].filter(Boolean);
-    return`<div class="card" style="animation-delay:${idx*.05}s">
+    return`<div class="card" style="animation-delay:${Math.min(idx,.15)*0.05}s">
       <div class="card-img-wrap" onclick="abrirModal('${im.id}')">
-        ${pf?`<img src="${pf}" class="card-img" alt="${im.titulo}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder>🏠</div>'">`:'<div class="card-img-placeholder">🏠</div>'}
+        ${pf?`<img src="${pf}" class="card-img" alt="${im.titulo||''}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=card-img-placeholder>🏠</div>'">`:'<div class="card-img-placeholder">🏠</div>'}
         <div class="card-img-overlay"></div>
-        <span class="card-badge">${im.tipo}</span>
+        <span class="card-badge">${im.tipo||''}</span>
         ${tagHtml}
         ${fotos.length>1?`<span class="card-foto-count">📷 ${fotos.length} fotos</span>`:''}
         <button class="btn-fav${isFav?' favoritado':''}" onclick="toggleFav('${im.id}',event)" title="${isFav?'Remover dos favoritos':'Adicionar aos favoritos'}">${isFav?'❤':'🤍'}</button>
         <button class="card-del" onclick="event.stopPropagation();deletarImovel('${im.id}')">🗑</button>
       </div>
       <div class="card-body" onclick="abrirModal('${im.id}')">
-        <div class="card-price">${im.preco}</div>
-        <div class="card-title">${im.titulo}</div>
-        <div class="card-location">📍 ${im.local}</div>
+        <div class="card-price">${im.preco||''}</div>
+        <div class="card-title">${im.titulo||''}</div>
+        <div class="card-location">📍 ${im.local||''}</div>
         <div class="card-desc">${im.desc||''}</div>
         ${feats.length>0?`<div class="card-features">${feats.join('')}</div>`:''}
       </div>
@@ -994,7 +988,14 @@ window.abrirModal=function(id){
   document.getElementById('modal-wpp').href=`https://wa.me/55${wpp}?text=${msg}`;
   document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';
 };
-window.fecharModal=function(e){if(e&&e.target!==document.getElementById('modal'))return;document.getElementById('modal').classList.remove('open');document.body.style.overflow='';};
+window.fecharModal=function(e){
+  if(e&&e.target!==document.getElementById('modal'))return;
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow='';
+  // Parar vídeo ao fechar modal
+  const v=document.getElementById('modal-video');
+  if(v){v.pause();v.currentTime=0;}
+};
 
 // ===== COMPARTILHAR =====
 window.compartilhar=function(){
@@ -1127,24 +1128,14 @@ function renderPreview(){
 
 window.removerPreview=function(idx){fotosBase64.splice(idx,1);renderPreview();};
 
-// Integrar fotos base64 ao salvar
-const _salvarOriginal=window.salvarImovel;
-window.salvarImovel=async function(){
-  // Coletar links manuais
-  const linksForm=Array.from(document.querySelectorAll('#fotos-lista input')).map(i=>i.value.trim()).filter(v=>v);
-  // Juntar base64 + links
-  const todasFotos=[...fotosBase64,...linksForm];
-  if(todasFotos.length===0&&!document.getElementById('f-titulo').value.trim()){alert('Preencha pelo menos: título, preço e localização.');return;}
-  // Temporariamente sobrescrever o campo de fotos para o salvar original
-  window._fotosParaSalvar=todasFotos;
-  await _salvarOriginal();
-};
+// Integrar fotos base64 ao salvar - sobrescreve salvarImovel para incluir fotos do upload
+// (a função original coletarDadosForm já lida com fotosBase64 diretamente)
 
-// Limpar preview ao fechar/cancelar
-const _cancelarOriginal=window.cancelarEdicao;
-window.cancelarEdicao=function(){fotosBase64=[];renderPreview();if(_cancelarOriginal)_cancelarOriginal();};
-const _fecharOriginal=window.fecharPainelAdmin;
-window.fecharPainelAdmin=function(){fotosBase64=[];renderPreview();if(_fecharOriginal)_fecharOriginal();};
+// Limpar preview ao fechar/cancelar — extende as funções originais de forma limpa
+const _origCancelar=window.cancelarEdicao;
+window.cancelarEdicao=function(){fotosBase64=[];videoBase64=null;renderPreview();if(_origCancelar)_origCancelar();};
+const _origFechar=window.fecharPainelAdmin;
+window.fecharPainelAdmin=function(){fotosBase64=[];videoBase64=null;renderPreview();if(_origFechar)_origFechar();};
 
 // ===== IA — PREENCHER FORMULÁRIO =====
 window.abrirIAPreencher=function(){
@@ -1241,4 +1232,15 @@ window.enviarAnalise=function(){
   const cpf=document.getElementById('cr-cpf').value;
   if(!nome||!wpp||!cpfNum||!renda||!valor){mostrarToast('⚠ Preencha nome, WhatsApp, CPF, renda e valor.');return;}
   const msg=`Olá Estephaní! Quero fazer minha análise de crédito gratuita! 🏠\n\n📋 *Meus dados:*\n👤 Nome: ${nome}\n📱 WhatsApp: ${wpp}\n🪪 CPF: ${cpfNum}\n🏡 Tipo de imóvel: ${tipoImovel||'Não informado'}\n💰 Renda mensal: ${renda}\n💵 Valor que busco: ${valor}\n💼 Tenho FGTS: ${fgts||'Não informado'}\n📄 Restrição no CPF: ${cpf||'Não informado'}\n\nAguardo seu retorno!`;
-  const nume
+  const numero=whatsappGlobal||'62981860902';
+  window.open(`https://wa.me/55${numero}?text=${encodeURIComponent(msg)}`,'_blank');
+  mostrarToast('✓ Abrindo WhatsApp...');
+};
+
+// ===== INICIALIZAR =====
+atualizarBadgeFavs();
+carregarImoveis();
+
+</script>
+</body>
+</html>
